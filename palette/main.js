@@ -60,7 +60,7 @@ function setPixel(imageData, x, y, color) {
   imageData.data[offset + 0] = color[0];
   imageData.data[offset + 1] = color[1];
   imageData.data[offset + 2] = color[2];
-  imageData.data[offset + 3] = color[0];
+  imageData.data[offset + 3] = 255;
 }
 
 function colorsMatch(a, b, rangeSq) {
@@ -97,19 +97,30 @@ function floodFill(ctx, x, y, fillColor, range = 1) {
   }
 }
 
-function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16)
-      }
-    : null;
+function hexToRgbA(hex) {
+  var c;
+  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+    c = hex.substring(1).split('');
+    if (c.length == 3) {
+      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    }
+    c = '0x' + c.join('');
+    return [(c >> 16) & 255, (c >> 8) & 255, c & 255];
+  }
+  throw new Error('Bad Hex');
 }
 
 function rgbToHex(r, g, b) {
   return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function updateColors(color) {
+  properties.prevColor = properties.curColor;
+  properties.curColor = color;
+  colorPickerWrapper.style.backgroundColor = properties.curColor;
+  previousColor.querySelector('.color-sample').style.backgroundColor = properties.prevColor;
+  currentColor.setAttribute('data-color', properties.curColor);
+  previousColor.setAttribute('data-color', properties.prevColor);
 }
 
 toolItems.forEach(element => {
@@ -126,12 +137,7 @@ toolItems.forEach(element => {
 
 paletteItems.forEach(element => {
   element.addEventListener('click', () => {
-    properties.prevColor = properties.curColor;
-    properties.curColor = element.dataset.color;
-    colorPickerWrapper.style.backgroundColor = properties.curColor;
-    previousColor.querySelector('.color-sample').style.backgroundColor = properties.prevColor;
-    currentColor.setAttribute('data-color', properties.curColor);
-    previousColor.setAttribute('data-color', properties.prevColor);
+    updateColors(element.dataset.color);
   });
 });
 
@@ -168,17 +174,31 @@ canvas.addEventListener(
 canvas.addEventListener('mouseout', () => (properties.isMouseDown = false));
 canvas.addEventListener('click', e => {
   if (properties.tool === 'bucket') {
-    const curColor = hexToRgb(properties.curColor);
-    floodFill(ctx, e.layerX, e.layerY, [curColor.r, curColor.g, curColor.b, 255]);
+    const color = hexToRgbA(properties.curColor);
+    floodFill(ctx, e.layerX, e.layerY, color);
   }
   if (properties.tool === 'eyedropper') {
     const sampleColor = rgbToHex(...ctx.getImageData(e.layerX, e.layerY, 1, 1).data);
-    console.log(sampleColor);
-    properties.prevColor = properties.curColor;
-    properties.curColor = sampleColor;
-    colorPickerWrapper.style.backgroundColor = properties.curColor;
-    previousColor.querySelector('.color-sample').style.backgroundColor = properties.prevColor;
-    currentColor.setAttribute('data-color', properties.curColor);
-    previousColor.setAttribute('data-color', properties.prevColor);
+    updateColors(sampleColor);
+  }
+});
+
+window.addEventListener('keypress', e => {
+  if (['KeyB', 'KeyP', 'KeyC'].includes(e.code)) {
+    toolItems.forEach(element => element.classList.remove('active'));
+    switch (e.code) {
+      case 'KeyB':
+        properties.tool = 'bucket';
+        document.querySelector('[data-tool="bucket"]').classList.add('active');
+        break;
+      case 'KeyP':
+        properties.tool = 'pencil';
+        document.querySelector('[data-tool="pencil"]').classList.add('active');
+        break;
+      case 'KeyC':
+        properties.tool = 'eyedropper';
+        document.querySelector('[data-tool="eyedropper"]').classList.add('active');
+        break;
+    }
   }
 });
