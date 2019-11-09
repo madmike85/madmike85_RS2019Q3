@@ -101,6 +101,19 @@ main {
     cursor: unset;
   }
 }
+.palette-item {
+  &.current-color {
+    .color-sample {
+      background: #000000;
+    }
+  }
+
+  &.prev-color {
+    .color-sample {
+      background: #41f795;
+    }
+  }
+}
 
 .color-sample {
   margin-right: 33px;
@@ -112,14 +125,6 @@ main {
   height: 20px;
   border-radius: 50%;
   border: 1px solid #000000;
-
-  &.current-color {
-    background: #c4c4c4;
-  }
-
-  &.prev-color {
-    background: #41f795;
-  }
 
   &.red {
     background: #f74141;
@@ -157,9 +162,6 @@ main {
 }
 
 .canvas-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: absolute;
   top: 73px;
   left: 34%;
@@ -169,8 +171,11 @@ main {
 }
 
 #canvas {
-  max-height: 40px;
-  max-width: 40px;
   image-rendering: pixelated;
-  transform: scale(12.8);
+  position: absolute;
+  top: 73px;
+  left: 34%;
+  width: 512px;
+  height: 512px;
+  border: solid 1px black;
 }

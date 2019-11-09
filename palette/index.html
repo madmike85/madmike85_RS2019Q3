@@ -42,29 +42,27 @@
       </div>
       <div class="items-container colors">
         <ul class="items-conteiner-list">
-          <li class="list-item">
-            <div class="color-sample current-color"></div>
+          <li class="list-item palette-item current-color" data-color="#000000">
+            <div class="color-sample"></div>
             <p class="item-title">Current color</p>
           </li>
-          <li class="list-item">
-            <div class="color-sample prev-color"></div>
+          <li class="list-item palette-item prev-color" data-color="#41f795">
+            <div class="color-sample "></div>
             <p class="item-title">Prev color</p>
           </li>
         </ul>
         <ul class="items-conteiner-list">
-          <li class="list-item">
+          <li class="list-item palette-item" data-color="#f74141">
             <div class="color-sample red"></div>
             <p class="item-title">red</p>
           </li>
-          <li class="list-item">
+          <li class="list-item palette-item" data-color="#41b6f7">
             <div class="color-sample blue"></div>
             <p class="item-title">blue</p>
           </li>
         </ul>
       </div>
-      <div class="canvas-wrapper">
-        <canvas id="canvas"></canvas>
-      </div>
+      <canvas id="canvas" width="512" height="512"></canvas>
     </main>
     <script src="main.js"></script>
   </body>
