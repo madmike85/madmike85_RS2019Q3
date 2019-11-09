@@ -9,7 +9,20 @@ const previousColor = document.querySelector('.prev-color');
 
 const colorPicker = document.getElementById('color-picker');
 const colorPickerWrapper = document.getElementById('color-picker-wrapper');
-colorPicker.onchange = function() {
+
+const pixelSizeX = 8;
+const pixelSizeY = 8;
+
+const properties = {
+  tool: null,
+  curColor: '#ff0000',
+  prevColor: '#41f795',
+  isMouseDown: false,
+  lastX: 0,
+  lastY: 0,
+};
+
+colorPicker.onchange = () => {
   colorPickerWrapper.style.backgroundColor = colorPicker.value;
   properties.prevColor = properties.curColor;
   properties.curColor = colorPicker.value;
@@ -18,25 +31,12 @@ colorPicker.onchange = function() {
 };
 colorPickerWrapper.style.backgroundColor = colorPicker.value;
 
-const pixelSizeX = 8;
-const pixelSizeY = 8;
-
-const canvasWidth = 512;
-const canvasHeight = 512;
-
-const properties = {
-  tool: null,
-  curColor: '#ff0000',
-  prevColor: '#41f795',
-  isMouseDown: false,
-  lastX: 0,
-  lastY: 0
-};
-
 function draw() {
   if (properties.isMouseDown) {
     ctx.beginPath();
-    if (properties.lastX > 0 && properties.lastY > 0) ctx.moveTo(properties.lastX, properties.lastY);
+    if (properties.lastX > 0 && properties.lastY > 0) {
+      ctx.moveTo(properties.lastX, properties.lastY);
+    }
     const x = Math.ceil(properties.lastX / pixelSizeX) * pixelSizeX - pixelSizeX;
     const y = Math.ceil(properties.lastY / pixelSizeY) * pixelSizeY - pixelSizeY;
     ctx.moveTo(x, y);
@@ -49,10 +49,9 @@ function draw() {
 function getPixel(imageData, x, y) {
   if (x < 0 || y < 0 || x >= imageData.width || y >= imageData.height) {
     return [-1, -1, -1, -1];
-  } else {
-    const offset = (y * imageData.width + x) * 4;
-    return imageData.data.slice(offset, offset + 4);
   }
+  const offset = (y * imageData.width + x) * 4;
+  return imageData.data.slice(offset, offset + 4);
 }
 
 function setPixel(imageData, x, y, color) {
@@ -80,8 +79,8 @@ function floodFill(ctx, x, y, fillColor, range = 1) {
     const rangeSq = range * range;
     const pixelsToCheck = [x, y];
     while (pixelsToCheck.length > 0) {
-      const y = pixelsToCheck.pop();
-      const x = pixelsToCheck.pop();
+      y = pixelsToCheck.pop();
+      x = pixelsToCheck.pop();
 
       const currentColor = getPixel(imageData, x, y);
       if (!visited[y * imageData.width + x] && colorsMatch(currentColor, targetColor, rangeSq)) {
@@ -98,20 +97,20 @@ function floodFill(ctx, x, y, fillColor, range = 1) {
 }
 
 function hexToRgbA(hex) {
-  var c;
+  let c;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
     c = hex.substring(1).split('');
     if (c.length == 3) {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
-    c = '0x' + c.join('');
+    c = `0x${c.join('')}`;
     return [(c >> 16) & 255, (c >> 8) & 255, c & 255];
   }
   throw new Error('Bad Hex');
 }
 
 function rgbToHex(r, g, b) {
-  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
 function updateColors(color) {
@@ -123,19 +122,19 @@ function updateColors(color) {
   previousColor.setAttribute('data-color', properties.prevColor);
 }
 
-toolItems.forEach(element => {
-  element.addEventListener('click', e => {
+toolItems.forEach((element) => {
+  element.addEventListener('click', (e) => {
     if (element.classList.contains('active')) {
       return;
     } else if (!element.classList.contains('disabled')) {
-      toolItems.forEach(element => element.classList.remove('active'));
+      toolItems.forEach((element) => element.classList.remove('active'));
       element.classList.add('active');
       properties.tool = element.dataset.tool;
     }
   });
 });
 
-paletteItems.forEach(element => {
+paletteItems.forEach((element) => {
   element.addEventListener('click', () => {
     updateColors(element.dataset.color);
   });
@@ -143,7 +142,7 @@ paletteItems.forEach(element => {
 
 canvas.addEventListener(
   'mousedown',
-  e => {
+  (e) => {
     if (properties.tool === 'pencil') {
       properties.isMouseDown = true;
     }
@@ -153,7 +152,7 @@ canvas.addEventListener(
 );
 canvas.addEventListener(
   'mousemove',
-  e => {
+  (e) => {
     if (properties.tool === 'pencil') {
       [properties.lastX, properties.lastY] = [e.layerX, e.layerY];
       draw();
@@ -163,7 +162,7 @@ canvas.addEventListener(
 );
 canvas.addEventListener(
   'mouseup',
-  e => {
+  (e) => {
     if (properties.tool === 'pencil') {
       properties.isMouseDown = false;
     }
@@ -172,7 +171,7 @@ canvas.addEventListener(
   false
 );
 canvas.addEventListener('mouseout', () => (properties.isMouseDown = false));
-canvas.addEventListener('click', e => {
+canvas.addEventListener('click', (e) => {
   if (properties.tool === 'bucket') {
     const color = hexToRgbA(properties.curColor);
     floodFill(ctx, e.layerX, e.layerY, color);
@@ -183,9 +182,9 @@ canvas.addEventListener('click', e => {
   }
 });
 
-window.addEventListener('keypress', e => {
+window.addEventListener('keypress', (e) => {
   if (['KeyB', 'KeyP', 'KeyC'].includes(e.code)) {
-    toolItems.forEach(element => element.classList.remove('active'));
+    toolItems.forEach((element) => element.classList.remove('active'));
     switch (e.code) {
       case 'KeyB':
         properties.tool = 'bucket';
