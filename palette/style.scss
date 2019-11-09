@@ -135,6 +135,24 @@ main {
   }
 }
 
+input[type='color'] {
+  opacity: 0;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 33px;
+  border: 1px solid #000000;
+}
+#color-picker-wrapper {
+  float: left;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 33px;
+  border: 1px solid #000000;
+}
+
 .sizes {
   .items-conteiner-list {
     border: none;

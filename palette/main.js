@@ -7,6 +7,17 @@ const paletteItems = document.querySelectorAll('.palette-item');
 const currentColor = document.querySelector('.current-color');
 const previousColor = document.querySelector('.prev-color');
 
+const colorPicker = document.getElementById('color-picker');
+const colorPickerWrapper = document.getElementById('color-picker-wrapper');
+colorPicker.onchange = function() {
+  colorPickerWrapper.style.backgroundColor = colorPicker.value;
+  properties.prevColor = properties.curColor;
+  properties.curColor = colorPicker.value;
+  currentColor.setAttribute('data-color', properties.curColor);
+  previousColor.setAttribute('data-color', properties.prevColor);
+};
+colorPickerWrapper.style.backgroundColor = colorPicker.value;
+
 const pixelSizeX = 8;
 const pixelSizeY = 8;
 
@@ -15,8 +26,8 @@ const canvasHeight = 512;
 
 const properties = {
   tool: null,
-  curColor: 'BADA55',
-  prevColor: null,
+  curColor: '#ff0000',
+  prevColor: '#41f795',
   isMouseDown: false,
   lastX: 0,
   lastY: 0
@@ -117,9 +128,10 @@ paletteItems.forEach(element => {
   element.addEventListener('click', () => {
     properties.prevColor = properties.curColor;
     properties.curColor = element.dataset.color;
-
-    currentColor.querySelector('.color-sample').style.backgroundColor = properties.curColor;
+    colorPickerWrapper.style.backgroundColor = properties.curColor;
     previousColor.querySelector('.color-sample').style.backgroundColor = properties.prevColor;
+    currentColor.setAttribute('data-color', properties.curColor);
+    previousColor.setAttribute('data-color', properties.prevColor);
   });
 });
 
@@ -157,6 +169,16 @@ canvas.addEventListener('mouseout', () => (properties.isMouseDown = false));
 canvas.addEventListener('click', e => {
   if (properties.tool === 'bucket') {
     const curColor = hexToRgb(properties.curColor);
-    floodFill(ctx, e.layerX, e.layerY, [curColor.r, curColor.g, curColor.b, curColor.a]);
+    floodFill(ctx, e.layerX, e.layerY, [curColor.r, curColor.g, curColor.b, 255]);
+  }
+  if (properties.tool === 'eyedropper') {
+    const sampleColor = rgbToHex(...ctx.getImageData(e.layerX, e.layerY, 1, 1).data);
+    console.log(sampleColor);
+    properties.prevColor = properties.curColor;
+    properties.curColor = sampleColor;
+    colorPickerWrapper.style.backgroundColor = properties.curColor;
+    previousColor.querySelector('.color-sample').style.backgroundColor = properties.prevColor;
+    currentColor.setAttribute('data-color', properties.curColor);
+    previousColor.setAttribute('data-color', properties.prevColor);
   }
 });
