@@ -202,7 +202,7 @@ canvas.addEventListener(
       properties.isMouseDown = false;
     }
     e.preventDefault();
-    localStorage.setItem('canvas', canvas.toDataURL());
+    // localStorage.setItem('canvas', canvas.toDataURL());
   },
   false
 );
@@ -216,7 +216,7 @@ canvas.addEventListener('click', (e) => {
     const sampleColor = rgbToHex(...ctx.getImageData(e.layerX, e.layerY, 1, 1).data);
     updateColors(sampleColor);
   }
-  localStorage.setItem('canvas', canvas.toDataURL());
+  // localStorage.setItem('canvas', canvas.toDataURL());
 });
 
 window.addEventListener('keypress', (e) => {
@@ -244,3 +244,5 @@ window.addEventListener('DOMContentLoaded', () => {
   loadCanvas();
   updateCursor();
 });
+
+window.addEventListener('beforeunload', () => localStorage.setItem('canvas', canvas.toDataURL()));
