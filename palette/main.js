@@ -140,6 +140,22 @@ function loadCanvas() {
   }
 }
 
+function updateCursor() {
+  switch (properties.tool) {
+    case 'pencil':
+      canvas.style.cursor = 'url(assets/images/pencil.cur), default';
+      break;
+    case 'bucket':
+      canvas.style.cursor = 'url(assets/images/paint-bucket.cur), default';
+      break;
+    case 'eyedropper':
+      canvas.style.cursor = 'url(assets/images/eyedropper.cur), default';
+      break;
+    default:
+      break;
+  }
+}
+
 toolItems.forEach((element) => {
   element.addEventListener('click', (e) => {
     if (element.classList.contains('active')) {
@@ -148,6 +164,7 @@ toolItems.forEach((element) => {
       toolItems.forEach((element) => element.classList.remove('active'));
       element.classList.add('active');
       properties.tool = element.dataset.tool;
+      updateCursor();
     }
   });
 });
@@ -225,4 +242,5 @@ window.addEventListener('keypress', (e) => {
 
 window.addEventListener('DOMContentLoaded', () => {
   loadCanvas();
+  updateCursor();
 });
