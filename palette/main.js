@@ -29,7 +29,6 @@ const properties = {
 };
 
 colorPicker.onchange = () => {
-  console.log('color');
   colorPickerWrapper.style.backgroundColor = colorPicker.value;
   properties.prevColor = properties.curColor;
   properties.curColor = colorPicker.value;
@@ -77,8 +76,8 @@ function colorsMatch(a, b, rangeSq) {
   return dr * dr + dg * dg + db * db + da * da < rangeSq;
 }
 
-function floodFill(ctx, x, y, fillColor, range = 1) {
-  const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+function floodFill(context, x, y, fillColor, range = 1) {
+  const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
   const visited = new Uint8Array(imageData.width, imageData.height);
   const targetColor = getPixel(imageData, x, y);
 
@@ -89,8 +88,11 @@ function floodFill(ctx, x, y, fillColor, range = 1) {
       y = pixelsToCheck.pop();
       x = pixelsToCheck.pop();
 
-      const currentColor = getPixel(imageData, x, y);
-      if (!visited[y * imageData.width + x] && colorsMatch(currentColor, targetColor, rangeSq)) {
+      const currentPixelColor = getPixel(imageData, x, y);
+      if (
+        !visited[y * imageData.width + x] &&
+        colorsMatch(currentPixelColor, targetColor, rangeSq)
+      ) {
         setPixel(imageData, x, y, fillColor);
         visited[y * imageData.width + x] = 1;
         pixelsToCheck.push(x + 1, y);
@@ -99,7 +101,7 @@ function floodFill(ctx, x, y, fillColor, range = 1) {
         pixelsToCheck.push(x, y - 1);
       }
     }
-    ctx.putImageData(imageData, 0, 0);
+    context.putImageData(imageData, 0, 0);
   }
 }
 
@@ -107,7 +109,7 @@ function hexToRgbA(hex) {
   let c;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
     c = hex.substring(1).split('');
-    if (c.length == 3) {
+    if (c.length === 3) {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
     c = `0x${c.join('')}`;
@@ -134,7 +136,7 @@ function loadCanvas() {
   if (dataURL) {
     const img = new Image();
     img.src = dataURL;
-    img.onload = function() {
+    img.onload = () => {
       ctx.drawImage(img, 0, 0);
     };
   }
@@ -157,10 +159,12 @@ function updateCursor() {
 }
 
 toolItems.forEach((element) => {
-  element.addEventListener('click', (e) => {
+  element.addEventListener('click', () => {
     if (element.classList.contains('active')) {
       return;
-    } else if (!element.classList.contains('disabled')) {
+    }
+
+    if (!element.classList.contains('disabled')) {
       toolItems.forEach((element) => element.classList.remove('active'));
       element.classList.add('active');
       properties.tool = element.dataset.tool;
@@ -202,7 +206,6 @@ canvas.addEventListener(
       properties.isMouseDown = false;
     }
     e.preventDefault();
-    // localStorage.setItem('canvas', canvas.toDataURL());
   },
   false
 );
@@ -216,7 +219,6 @@ canvas.addEventListener('click', (e) => {
     const sampleColor = rgbToHex(...ctx.getImageData(e.layerX, e.layerY, 1, 1).data);
     updateColors(sampleColor);
   }
-  // localStorage.setItem('canvas', canvas.toDataURL());
 });
 
 window.addEventListener('keypress', (e) => {
