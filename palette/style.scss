@@ -104,13 +104,13 @@ main {
 .palette-item {
   &.current-color {
     .color-sample {
-      background: #000000;
+      background: #41f795;
     }
   }
 
   &.prev-color {
     .color-sample {
-      background: #41f795;
+      background: #ffa500;
     }
   }
 }

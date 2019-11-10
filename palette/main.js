@@ -20,15 +20,16 @@ const calcPixelSizeX = Math.ceil(canvasSizeX / pixelSizeX);
 const calcPixelSizeY = Math.ceil(canvasSizeY / pixelSizeY);
 
 const properties = {
-  tool: null,
-  curColor: '#ff0000',
-  prevColor: '#41f795',
+  tool: 'pencil',
+  curColor: '#41f795',
+  prevColor: '#ffa500',
   isMouseDown: false,
   lastX: 0,
   lastY: 0,
 };
 
 colorPicker.onchange = () => {
+  console.log('color');
   colorPickerWrapper.style.backgroundColor = colorPicker.value;
   properties.prevColor = properties.curColor;
   properties.curColor = colorPicker.value;
