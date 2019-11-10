@@ -10,8 +10,14 @@ const previousColor = document.querySelector('.prev-color');
 const colorPicker = document.getElementById('color-picker');
 const colorPickerWrapper = document.getElementById('color-picker-wrapper');
 
+const canvasSizeX = 512;
+const canvasSizeY = 512;
+
 const pixelSizeX = 8;
 const pixelSizeY = 8;
+
+const calcPixelSizeX = Math.ceil(canvasSizeX / pixelSizeX);
+const calcPixelSizeY = Math.ceil(canvasSizeY / pixelSizeY);
 
 const properties = {
   tool: null,
@@ -37,12 +43,12 @@ function draw() {
     if (properties.lastX > 0 && properties.lastY > 0) {
       ctx.moveTo(properties.lastX, properties.lastY);
     }
-    const x = Math.ceil(properties.lastX / pixelSizeX) * pixelSizeX - pixelSizeX;
-    const y = Math.ceil(properties.lastY / pixelSizeY) * pixelSizeY - pixelSizeY;
+    const x = Math.ceil(properties.lastX / calcPixelSizeX) * calcPixelSizeX - calcPixelSizeX;
+    const y = Math.ceil(properties.lastY / calcPixelSizeY) * calcPixelSizeY - calcPixelSizeY;
     ctx.moveTo(x, y);
     ctx.fillStyle = properties.curColor;
     ctx.lineHeight = 0;
-    ctx.fillRect(x, y, pixelSizeX, pixelSizeY);
+    ctx.fillRect(x, y, calcPixelSizeX, calcPixelSizeY);
   }
 }
 
@@ -198,6 +204,7 @@ window.addEventListener('keypress', (e) => {
         properties.tool = 'eyedropper';
         document.querySelector('[data-tool="eyedropper"]').classList.add('active');
         break;
+      default:
     }
   }
 });
