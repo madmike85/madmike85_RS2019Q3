@@ -129,6 +129,17 @@ function updateColors(color) {
   previousColor.setAttribute('data-color', properties.prevColor);
 }
 
+function loadCanvas() {
+  const dataURL = localStorage.getItem('canvas');
+  if (dataURL) {
+    const img = new Image();
+    img.src = dataURL;
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0);
+    };
+  }
+}
+
 toolItems.forEach((element) => {
   element.addEventListener('click', (e) => {
     if (element.classList.contains('active')) {
@@ -174,6 +185,7 @@ canvas.addEventListener(
       properties.isMouseDown = false;
     }
     e.preventDefault();
+    localStorage.setItem('canvas', canvas.toDataURL());
   },
   false
 );
@@ -187,6 +199,7 @@ canvas.addEventListener('click', (e) => {
     const sampleColor = rgbToHex(...ctx.getImageData(e.layerX, e.layerY, 1, 1).data);
     updateColors(sampleColor);
   }
+  localStorage.setItem('canvas', canvas.toDataURL());
 });
 
 window.addEventListener('keypress', (e) => {
@@ -208,4 +221,8 @@ window.addEventListener('keypress', (e) => {
       default:
     }
   }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadCanvas();
 });
