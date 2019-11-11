@@ -239,6 +239,7 @@ window.addEventListener('keypress', (e) => {
         break;
       default:
     }
+    updateCursor();
   }
 });
 
