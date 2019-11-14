@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Codejam-canvas</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <nav class="menu">
+        <div class="hamburger">
+          <img src="assets/images/menu.svg" alt="menu" />
+        </div>
+        <h1 class="menu-title">CodeJam - Pallete</h1>
+        <div class="dot-menu">
+          <img src="assets/images/dot-menu icon.svg" alt="dot-menu" />
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="items-container instruments">
+        <ul class="items-conteiner-list">
+          <li class="list-item tool-item" data-tool="bucket">
+            <img src="assets/images/icon-bucket.svg" alt="bucket" class="item-img" />
+            <p class="item-title">Paint bucket</p>
+          </li>
+          <li class="list-item tool-item" data-tool="eyedropper">
+            <img src="assets/images/icon-eyedropper.svg" alt="eyedropper" class="item-img" />
+            <p class="item-title">Choose color</p>
+          </li>
+          <li class="list-item tool-item active" data-tool="pencil">
+            <img src="assets/images/icon-pencil.svg" alt="pencil" class="item-img" />
+            <p class="item-title">Pencil</p>
+          </li>
+          <li class="list-item tool-item disabled">
+            <img src="assets/images/icon-transform.svg" alt="transform" class="item-img" />
+            <p class="item-title">Transform</p>
+          </li>
+        </ul>
+      </div>
+      <div class="items-container colors">
+        <ul class="items-conteiner-list">
+          <li class="list-item palette-item current-color" data-color="#41f795">
+            <!-- <div class="color-sample"></div> -->
+            <div id="color-picker-wrapper">
+              <input type="color" value="#41f795" id="color-picker" />
+            </div>
+            <p class="item-title">Current color</p>
+          </li>
+          <li class="list-item palette-item prev-color" data-color="#ffa500">
+            <div class="color-sample "></div>
+            <p class="item-title">Prev color</p>
+          </li>
+        </ul>
+        <ul class="items-conteiner-list">
+          <li class="list-item palette-item" data-color="#f74141">
+            <div class="color-sample red"></div>
+            <p class="item-title">red</p>
+          </li>
+          <li class="list-item palette-item" data-color="#41b6f7">
+            <div class="color-sample blue"></div>
+            <p class="item-title">blue</p>
+          </li>
+        </ul>
+      </div>
+      <canvas id="canvas" width="512" height="512"></canvas>
+    </main>
+    <script src="main.js"></script>
+  </body>
+</html>
