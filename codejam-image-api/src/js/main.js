@@ -145,13 +145,13 @@ function loadCanvas() {
 function updateCursor() {
   switch (properties.tool) {
     case 'pencil':
-      canvas.style.cursor = 'url(assets/images/pencil.cur), default';
+      canvas.style.cursor = 'url(assets/img/pencil.cur), default';
       break;
     case 'bucket':
-      canvas.style.cursor = 'url(assets/images/paint-bucket.cur), default';
+      canvas.style.cursor = 'url(assets/img/paint-bucket.cur), default';
       break;
     case 'eyedropper':
-      canvas.style.cursor = 'url(assets/images/eyedropper.cur), default';
+      canvas.style.cursor = 'url(assets/img/eyedropper.cur), default';
       break;
     default:
       break;
