@@ -10,14 +10,18 @@ const previousColor = document.querySelector('.prev-color');
 const colorPicker = document.getElementById('color-picker');
 const colorPickerWrapper = document.getElementById('color-picker-wrapper');
 
-const canvasSizeX = 512;
-const canvasSizeY = 512;
+const clearBtn = document.querySelector('.clear-btn');
+const loadBtn = document.querySelector('.load-btn');
+const bwBtn = document.querySelector('.b-w-btn');
+const searchField = document.querySelector('.search-field');
 
-const pixelSizeX = 8;
-const pixelSizeY = 8;
+const canvasSize = 512;
+const fieldSize = 128;
 
-const calcPixelSizeX = Math.ceil(canvasSizeX / pixelSizeX);
-const calcPixelSizeY = Math.ceil(canvasSizeY / pixelSizeY);
+const accessKey = 'da77f8e93ce7acc3573e17bbcf1419d4faf4ee916d5eaba2720f14d388d62bc9';
+
+const calcPixelSizeX = Math.ceil(canvasSize / fieldSize);
+const calcPixelSizeY = Math.ceil(canvasSize / fieldSize);
 
 const properties = {
   tool: 'pencil',
@@ -50,6 +54,16 @@ function draw() {
     ctx.lineHeight = 0;
     ctx.fillRect(x, y, calcPixelSizeX, calcPixelSizeY);
   }
+}
+
+async function drawImageOnCanvas() {
+  const url = `https://api.unsplash.com/photos/random?query=town,${searchField.value}&client_id=${accessKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const image = new Image();
+  image.crossOrigin = 'Anonymous';
+  image.src = data.urls.small;
+  image.onload = () => ctx.drawImage(image, 0, 0, canvasSize, canvasSize);
 }
 
 function getPixel(imageData, x, y) {
@@ -158,6 +172,10 @@ function updateCursor() {
   }
 }
 
+function refreshCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 toolItems.forEach((element) => {
   element.addEventListener('click', () => {
     if (element.classList.contains('active')) {
@@ -220,6 +238,9 @@ canvas.addEventListener('click', (e) => {
     updateColors(sampleColor);
   }
 });
+
+clearBtn.addEventListener('click', () => refreshCanvas());
+loadBtn.addEventListener('click', () => drawImageOnCanvas());
 
 window.addEventListener('keypress', (e) => {
   if (['KeyB', 'KeyP', 'KeyC'].includes(e.code)) {
