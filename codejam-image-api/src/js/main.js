@@ -15,6 +15,8 @@ const loadBtn = document.querySelector('.load-btn');
 const greyScaleBtn = document.querySelector('.greyscale-btn');
 const searchField = document.querySelector('.search-field');
 
+const alertBox = document.querySelector('.alert-popup');
+
 const canvasSize = 512;
 const fieldSize = 64;
 
@@ -196,7 +198,8 @@ function toGreyScale() {
 
     ctx.putImageData(imgData, 0, 0);
   } else {
-    console.log('Where is the img');
+    alertBox.classList.toggle('alert-popup--hidden');
+    setTimeout(() => alertBox.classList.toggle('alert-popup--hidden'), 2000);
   }
 }
 
