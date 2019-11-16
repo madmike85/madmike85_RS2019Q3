@@ -1,6 +1,8 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnable = false;
+ctx.mozImageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = false;
 
 const toolItems = document.querySelectorAll('.tool-item');
 const paletteItems = document.querySelectorAll('.palette-item');
@@ -68,7 +70,41 @@ async function drawImageOnCanvas() {
   image.crossOrigin = 'Anonymous';
   image.src = data.urls.small;
   image.onload = () => {
-    ctx.drawImage(image, 0, 0, canvasSize, canvasSize);
+    let ratio = 0;
+    let width = image.width;
+    let height = image.height;
+    let newWidth = width;
+    let newHeight = height;
+    let x = 0;
+    let y = 0;
+
+    if (width > 512) {
+      ratio = 512 / width;
+      newHeight = height * ratio;
+      newWidth = width * ratio;
+    }
+
+    if (height > 512) {
+      ratio = 512 / height;
+      newHeight = height * ratio;
+      newWidth = width * ratio;
+    }
+
+    console.log(newWidth, newHeight);
+
+    if (newWidth > newHeight) {
+      y = (canvas.height - height) / 2;
+      x = (canvas.width - width) / 2;
+    } else if (newWidth < newHeight) {
+      x = (canvas.width - width) / 2;
+      y = (canvas.height - height) / 2;
+    }
+
+    console.log(x, y);
+
+    ctx.drawImage(image, x, y, newWidth, newHeight);
+
+    //ctx.drawImage(image, 0, 0, 512, 512);
     properties.isImgLoaded = true;
   };
 }
@@ -227,6 +263,7 @@ paletteItems.forEach((element) => {
 canvas.addEventListener(
   'mousedown',
   (e) => {
+    console.log(e.layerX, e.layerY);
     if (properties.tool === 'pencil') {
       properties.isMouseDown = true;
     }
