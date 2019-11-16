@@ -90,8 +90,6 @@ async function drawImageOnCanvas() {
       newWidth = width * ratio;
     }
 
-    console.log(newWidth, newHeight);
-
     if (newWidth > newHeight) {
       y = (canvas.height - height) / 2;
       x = (canvas.width - width) / 2;
@@ -100,11 +98,8 @@ async function drawImageOnCanvas() {
       y = (canvas.height - height) / 2;
     }
 
-    console.log(x, y);
-
     ctx.drawImage(image, x, y, newWidth, newHeight);
 
-    //ctx.drawImage(image, 0, 0, 512, 512);
     properties.isImgLoaded = true;
   };
 }
