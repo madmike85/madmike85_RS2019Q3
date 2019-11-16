@@ -17,10 +17,16 @@ const loadBtn = document.querySelector('.load-btn');
 const greyScaleBtn = document.querySelector('.greyscale-btn');
 const searchField = document.querySelector('.search-field');
 
+const rangeSlider = document.querySelector('.range-slider__range');
+const rangeBullet = document.querySelector('.range-slider__label');
+
 const alertBox = document.querySelector('.alert-popup');
 
 const canvasSize = 512;
 const fieldSize = 64;
+
+canvas.width = 512;
+canvas.height = 512;
 
 const accessKey = 'da77f8e93ce7acc3573e17bbcf1419d4faf4ee916d5eaba2720f14d388d62bc9';
 
@@ -57,8 +63,16 @@ function draw() {
     if (properties.lastX > 0 && properties.lastY > 0) {
       ctx.moveTo(properties.lastX, properties.lastY);
     }
-    const x = Math.ceil(properties.lastX / calcPixelSizeX) * calcPixelSizeX - calcPixelSizeX;
-    const y = Math.ceil(properties.lastY / calcPixelSizeY) * calcPixelSizeY - calcPixelSizeY;
+
+    const fixedX = properties.lastX / (512 / 512);
+    const fixedY = properties.lastY / (512 / 512);
+
+    // const x = Math.ceil(properties.lastX / calcPixelSizeX) * calcPixelSizeX - calcPixelSizeX;
+    // const y = Math.ceil(properties.lastY / calcPixelSizeY) * calcPixelSizeY - calcPixelSizeY;
+
+    const x = Math.ceil(fixedX / calcPixelSizeX) * calcPixelSizeX - calcPixelSizeX;
+    const y = Math.ceil(fixedY / calcPixelSizeY) * calcPixelSizeY - calcPixelSizeY;
+
     ctx.moveTo(x, y);
     ctx.fillStyle = properties.curColor;
     ctx.lineHeight = 0;
@@ -83,27 +97,27 @@ async function drawImageOnCanvas() {
     let x = 0;
     let y = 0;
 
-    if (width > 512) {
-      ratio = 512 / width;
+    if (width > canvas.width) {
+      ratio = canvas.width / width;
       newHeight = height * ratio;
       newWidth = width * ratio;
     }
 
-    if (height > 512) {
-      ratio = 512 / height;
+    if (height > canvas.height) {
+      ratio = canvas.height / height;
       newHeight = height * ratio;
       newWidth = width * ratio;
     }
 
-    if (newWidth > newHeight) {
-      y = (canvas.height - height) / 2;
-      x = (canvas.width - width) / 2;
-    } else if (newWidth < newHeight) {
-      x = (canvas.width - width) / 2;
-      y = (canvas.height - height) / 2;
-    }
+    // y = (canvas.height - height) / 2;
+    // x = (canvas.width - width) / 2;
+
+    y = (canvas.height - newHeight) / 2;
+    x = (canvas.width - newWidth) / 2;
 
     ctx.drawImage(image, x, y, newWidth, newHeight);
+
+    // ctx.drawImage(image, 0, 0, newWidth, newHeight);
 
     properties.isImgLoaded = true;
   };
@@ -265,6 +279,13 @@ function loadSession() {
   });
 }
 
+function updateSliderValue() {
+  const values = ['128', '256', '512'];
+  rangeBullet.innerHTML = values[rangeSlider.value];
+  const bulletPosition = rangeSlider.value / rangeSlider.max;
+  rangeBullet.style.left = `${bulletPosition * 490}px`;
+}
+
 toolItems.forEach((element) => {
   element.addEventListener('click', () => {
     if (element.classList.contains('active')) {
@@ -331,6 +352,8 @@ canvas.addEventListener('click', (e) => {
 clearBtn.addEventListener('click', () => refreshCanvas());
 loadBtn.addEventListener('click', () => drawImageOnCanvas());
 greyScaleBtn.addEventListener('click', () => toGreyScale());
+
+rangeSlider.addEventListener('input', updateSliderValue, false);
 
 window.addEventListener('keypress', (e) => {
   if (['KeyB', 'KeyP', 'KeyC'].includes(e.code)) {
