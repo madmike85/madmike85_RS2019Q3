@@ -234,6 +234,37 @@ function toGreyScale() {
   }
 }
 
+function saveSession() {
+  localStorage.setItem('canvas', canvas.toDataURL());
+  localStorage.setItem('tool', properties.tool);
+  localStorage.setItem('currentColor', properties.curColor);
+  localStorage.setItem('previousColor', properties.prevColor);
+  localStorage.setItem('isImageLoaded', properties.isImgLoaded);
+}
+
+function loadSession() {
+  loadCanvas();
+  properties.tool = localStorage.getItem('tool') || 'pencil';
+  properties.curColor = localStorage.getItem('currentColor') || '#41f795';
+
+  properties.prevColor = localStorage.getItem('previousColor') || '#ffa500';
+  properties.isImgLoaded = localStorage.getItem('isImageLoaded');
+
+  colorPickerWrapper.style.backgroundColor = properties.curColor;
+  colorPicker.value = properties.curColor;
+  previousColor.querySelector('.color-sample').style.backgroundColor = properties.prevColor;
+  currentColor.setAttribute('data-color', properties.curColor);
+  previousColor.setAttribute('data-color', properties.prevColor);
+
+  updateCursor();
+  toolItems.forEach((element) => {
+    element.classList.remove('active');
+    if (element.dataset.tool === properties.tool) {
+      element.classList.add('active');
+    }
+  });
+}
+
 toolItems.forEach((element) => {
   element.addEventListener('click', () => {
     if (element.classList.contains('active')) {
@@ -325,8 +356,7 @@ window.addEventListener('keypress', (e) => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  loadCanvas();
-  updateCursor();
+  loadSession();
 });
 
-window.addEventListener('beforeunload', () => localStorage.setItem('canvas', canvas.toDataURL()));
+window.addEventListener('beforeunload', saveSession);
