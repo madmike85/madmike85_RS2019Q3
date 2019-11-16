@@ -12,11 +12,11 @@ const colorPickerWrapper = document.getElementById('color-picker-wrapper');
 
 const clearBtn = document.querySelector('.clear-btn');
 const loadBtn = document.querySelector('.load-btn');
-const bwBtn = document.querySelector('.b-w-btn');
+const greyScaleBtn = document.querySelector('.greyscale-btn');
 const searchField = document.querySelector('.search-field');
 
 const canvasSize = 512;
-const fieldSize = 128;
+const fieldSize = 64;
 
 const accessKey = 'da77f8e93ce7acc3573e17bbcf1419d4faf4ee916d5eaba2720f14d388d62bc9';
 
@@ -28,6 +28,7 @@ const properties = {
   curColor: '#41f795',
   prevColor: '#ffa500',
   isMouseDown: false,
+  isImgLoaded: false,
   lastX: 0,
   lastY: 0,
 };
@@ -57,13 +58,17 @@ function draw() {
 }
 
 async function drawImageOnCanvas() {
+  refreshCanvas();
   const url = `https://api.unsplash.com/photos/random?query=town,${searchField.value}&client_id=${accessKey}`;
   const response = await fetch(url);
   const data = await response.json();
   const image = new Image();
   image.crossOrigin = 'Anonymous';
   image.src = data.urls.small;
-  image.onload = () => ctx.drawImage(image, 0, 0, canvasSize, canvasSize);
+  image.onload = () => {
+    ctx.drawImage(image, 0, 0, canvasSize, canvasSize);
+    properties.isImgLoaded = true;
+  };
 }
 
 function getPixel(imageData, x, y) {
@@ -174,6 +179,25 @@ function updateCursor() {
 
 function refreshCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  properties.isImgLoaded = false;
+}
+
+function toGreyScale() {
+  if (properties.isImgLoaded) {
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+
+    for (let i = 0; i < data.length; i += 4) {
+      const avgColor = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      data[i] = avgColor;
+      data[i + 1] = avgColor;
+      data[i + 2] = avgColor;
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+  } else {
+    console.log('Where is the img');
+  }
 }
 
 toolItems.forEach((element) => {
@@ -241,6 +265,7 @@ canvas.addEventListener('click', (e) => {
 
 clearBtn.addEventListener('click', () => refreshCanvas());
 loadBtn.addEventListener('click', () => drawImageOnCanvas());
+greyScaleBtn.addEventListener('click', () => toGreyScale());
 
 window.addEventListener('keypress', (e) => {
   if (['KeyB', 'KeyP', 'KeyC'].includes(e.code)) {
