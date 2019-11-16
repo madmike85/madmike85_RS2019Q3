@@ -46,6 +46,11 @@ colorPicker.onchange = () => {
 };
 colorPickerWrapper.style.backgroundColor = colorPicker.value;
 
+function refreshCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  properties.isImgLoaded = false;
+}
+
 function draw() {
   if (properties.isMouseDown) {
     ctx.beginPath();
@@ -71,8 +76,8 @@ async function drawImageOnCanvas() {
   image.src = data.urls.small;
   image.onload = () => {
     let ratio = 0;
-    let width = image.width;
-    let height = image.height;
+    const { width } = image;
+    const { height } = image;
     let newWidth = width;
     let newHeight = height;
     let x = 0;
@@ -210,15 +215,10 @@ function updateCursor() {
   }
 }
 
-function refreshCanvas() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  properties.isImgLoaded = false;
-}
-
 function toGreyScale() {
   if (properties.isImgLoaded) {
     const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imgData.data;
+    const { data } = imgData;
 
     for (let i = 0; i < data.length; i += 4) {
       const avgColor = (data[i] + data[i + 1] + data[i + 2]) / 3;
@@ -289,7 +289,6 @@ paletteItems.forEach((element) => {
 canvas.addEventListener(
   'mousedown',
   (e) => {
-    console.log(e.layerX, e.layerY);
     if (properties.tool === 'pencil') {
       properties.isMouseDown = true;
     }
