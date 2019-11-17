@@ -5,12 +5,14 @@ ctx.mozImageSmoothingEnabled = false;
 ctx.webkitImageSmoothingEnabled = false;
 
 const toolItems = document.querySelectorAll('.tool-item');
-const paletteItems = document.querySelectorAll('.palette-item');
+const toolsPanel = document.querySelector('.instruments');
+
 const currentColor = document.querySelector('.current-color');
 const previousColor = document.querySelector('.prev-color');
 
-const colorPicker = document.getElementById('color-picker');
-const colorPickerWrapper = document.getElementById('color-picker-wrapper');
+const colorPicker = document.querySelector('.color-picker');
+const colorPickerWrapper = document.querySelector('.color-picker-wrapper');
+const colorsPanel = document.querySelector('.colors');
 
 const clearBtn = document.querySelector('.clear-btn');
 const loadBtn = document.querySelector('.load-btn');
@@ -299,25 +301,24 @@ function loadSession() {
   });
 }
 
-toolItems.forEach((element) => {
-  element.addEventListener('click', () => {
-    if (element.classList.contains('active')) {
-      return;
-    }
+toolsPanel.addEventListener('click', (e) => {
+  if (e.target.classList.contains('active')) {
+    return;
+  }
 
-    if (!element.classList.contains('disabled')) {
-      toolItems.forEach((element) => element.classList.remove('active'));
-      element.classList.add('active');
-      properties.tool = element.dataset.tool;
-      updateCursor();
-    }
-  });
+  if (!e.target.classList.contains('disabled') && e.target.classList.contains('tool-item')) {
+    e.stopPropagation();
+    toolItems.forEach((element) => element.classList.remove('active'));
+    e.target.classList.add('active');
+    properties.tool = e.target.dataset.tool;
+    updateCursor();
+  }
 });
 
-paletteItems.forEach((element) => {
-  element.addEventListener('click', () => {
-    updateColors(element.dataset.color);
-  });
+colorsPanel.addEventListener('click', (e) => {
+  if (e.target.classList.contains('palette-item')) {
+    updateColors(e.target.dataset.color);
+  }
 });
 
 canvas.addEventListener(
@@ -357,7 +358,6 @@ canvas.addEventListener('click', (e) => {
     const fixedX = e.layerX / (canvasSizeX / canvas.width);
     const fixedY = e.layerY / (canvasSizeX / canvas.height);
     floodFill(ctx, fixedX, fixedY, color);
-    //floodFill(ctx, e.layerX, e.layerY, color);
   }
   if (properties.tool === 'eyedropper') {
     const sampleColor = rgbToHex(...ctx.getImageData(e.layerX, e.layerY, 1, 1).data);
