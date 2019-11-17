@@ -22,16 +22,19 @@ const rangeBullet = document.querySelector('.range-slider__label');
 
 const alertBox = document.querySelector('.alert-popup');
 
-const canvasSize = 512;
-const fieldSize = 64;
+const canvasSizeX = 512;
+const canvasSizeY = 512;
+const pixelSizeX = 64;
+const pixelSizeY = 64;
 
-canvas.width = 512;
-canvas.height = 512;
+canvas.width = 128;
+canvas.height = 128;
 
 const accessKey = 'da77f8e93ce7acc3573e17bbcf1419d4faf4ee916d5eaba2720f14d388d62bc9';
+let imgUrl;
 
-const calcPixelSizeX = Math.ceil(canvasSize / fieldSize);
-const calcPixelSizeY = Math.ceil(canvasSize / fieldSize);
+const calcPixelSizeX = Math.ceil(canvasSizeX / pixelSizeX);
+const calcPixelSizeY = Math.ceil(canvasSizeY / pixelSizeY);
 
 const properties = {
   tool: 'pencil',
@@ -41,6 +44,7 @@ const properties = {
   isImgLoaded: false,
   lastX: 0,
   lastY: 0,
+  sliderValue: 0,
 };
 
 colorPicker.onchange = () => {
@@ -64,11 +68,8 @@ function draw() {
       ctx.moveTo(properties.lastX, properties.lastY);
     }
 
-    const fixedX = properties.lastX / (512 / 512);
-    const fixedY = properties.lastY / (512 / 512);
-
-    // const x = Math.ceil(properties.lastX / calcPixelSizeX) * calcPixelSizeX - calcPixelSizeX;
-    // const y = Math.ceil(properties.lastY / calcPixelSizeY) * calcPixelSizeY - calcPixelSizeY;
+    const fixedX = properties.lastX / (canvasSizeX / canvas.width);
+    const fixedY = properties.lastY / (canvasSizeX / canvas.height);
 
     const x = Math.ceil(fixedX / calcPixelSizeX) * calcPixelSizeX - calcPixelSizeX;
     const y = Math.ceil(fixedY / calcPixelSizeY) * calcPixelSizeY - calcPixelSizeY;
@@ -80,14 +81,10 @@ function draw() {
   }
 }
 
-async function drawImageOnCanvas() {
-  refreshCanvas();
-  const url = `https://api.unsplash.com/photos/random?query=town,${searchField.value}&client_id=${accessKey}`;
-  const response = await fetch(url);
-  const data = await response.json();
+function createImage() {
   const image = new Image();
   image.crossOrigin = 'Anonymous';
-  image.src = data.urls.small;
+  image.src = imgUrl;
   image.onload = () => {
     let ratio = 0;
     const { width } = image;
@@ -109,18 +106,23 @@ async function drawImageOnCanvas() {
       newWidth = width * ratio;
     }
 
-    // y = (canvas.height - height) / 2;
-    // x = (canvas.width - width) / 2;
-
     y = (canvas.height - newHeight) / 2;
     x = (canvas.width - newWidth) / 2;
 
     ctx.drawImage(image, x, y, newWidth, newHeight);
 
-    // ctx.drawImage(image, 0, 0, newWidth, newHeight);
-
     properties.isImgLoaded = true;
   };
+}
+
+async function drawImageOnCanvas() {
+  refreshCanvas();
+  const url = `https://api.unsplash.com/photos/random?query=town,${searchField.value}&client_id=${accessKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  imgUrl = data.urls.small;
+  createImage();
+  properties.isImgLoaded = true;
 }
 
 function getPixel(imageData, x, y) {
@@ -148,7 +150,7 @@ function colorsMatch(a, b, rangeSq) {
 }
 
 function floodFill(context, x, y, fillColor, range = 1) {
-  const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
   const visited = new Uint8Array(imageData.width, imageData.height);
   const targetColor = getPixel(imageData, x, y);
 
@@ -177,14 +179,14 @@ function floodFill(context, x, y, fillColor, range = 1) {
 }
 
 function hexToRgbA(hex) {
-  let c;
+  let colors;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-    c = hex.substring(1).split('');
-    if (c.length === 3) {
-      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+    colors = hex.substring(1).split('');
+    if (colors.length === 3) {
+      colors = [colors[0], colors[0], colors[1], colors[1], colors[2], colors[2]];
     }
-    c = `0x${c.join('')}`;
-    return [(c >> 16) & 255, (c >> 8) & 255, c & 255];
+    colors = `0x${colors.join('')}`;
+    return [(colors >> 16) & 255, (colors >> 8) & 255, colors & 255];
   }
   throw new Error('Bad Hex');
 }
@@ -248,16 +250,34 @@ function toGreyScale() {
   }
 }
 
+function updateSliderValue() {
+  const values = [128, 256, 512];
+  rangeBullet.innerHTML = values[rangeSlider.value];
+  const bulletPosition = rangeSlider.value / rangeSlider.max;
+  rangeBullet.style.left = `${bulletPosition * 490}px`;
+  canvas.width = values[rangeSlider.value];
+  canvas.height = values[rangeSlider.value];
+  properties.sliderValue = rangeSlider.value;
+  if (imgUrl) {
+    createImage();
+  }
+}
+
 function saveSession() {
   localStorage.setItem('canvas', canvas.toDataURL());
   localStorage.setItem('tool', properties.tool);
   localStorage.setItem('currentColor', properties.curColor);
   localStorage.setItem('previousColor', properties.prevColor);
   localStorage.setItem('isImageLoaded', properties.isImgLoaded);
+  localStorage.setItem('imgUrl', imgUrl);
+  localStorage.setItem('slierValue', properties.sliderValue);
 }
 
 function loadSession() {
+  rangeSlider.value = localStorage.getItem('slierValue');
+  updateSliderValue();
   loadCanvas();
+  imgUrl = localStorage.getItem('imgUrl') || null;
   properties.tool = localStorage.getItem('tool') || 'pencil';
   properties.curColor = localStorage.getItem('currentColor') || '#41f795';
 
@@ -277,13 +297,6 @@ function loadSession() {
       element.classList.add('active');
     }
   });
-}
-
-function updateSliderValue() {
-  const values = ['128', '256', '512'];
-  rangeBullet.innerHTML = values[rangeSlider.value];
-  const bulletPosition = rangeSlider.value / rangeSlider.max;
-  rangeBullet.style.left = `${bulletPosition * 490}px`;
 }
 
 toolItems.forEach((element) => {
@@ -349,7 +362,10 @@ canvas.addEventListener('click', (e) => {
   }
 });
 
-clearBtn.addEventListener('click', () => refreshCanvas());
+clearBtn.addEventListener('click', () => {
+  refreshCanvas();
+  imgUrl = '';
+});
 loadBtn.addEventListener('click', () => drawImageOnCanvas());
 greyScaleBtn.addEventListener('click', () => toGreyScale());
 
