@@ -241,7 +241,7 @@ input[type='color'] {
 .alert-popup {
   position: absolute;
   bottom: 30px;
-  left: 34%;
+  left: 38%;
   width: 512px;
   height: 35px;
   padding: 9px 5px 0px 5px;
@@ -256,7 +256,7 @@ input[type='color'] {
   @include transitions();
 
   &--hidden {
-    transform: translateX(-1030px);
+    transform: translateX(-300%);
   }
 }
 

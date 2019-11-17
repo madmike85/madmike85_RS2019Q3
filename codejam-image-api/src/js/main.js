@@ -354,7 +354,10 @@ canvas.addEventListener('mouseout', () => (properties.isMouseDown = false));
 canvas.addEventListener('click', (e) => {
   if (properties.tool === 'bucket') {
     const color = hexToRgbA(properties.curColor);
-    floodFill(ctx, e.layerX, e.layerY, color);
+    const fixedX = e.layerX / (canvasSizeX / canvas.width);
+    const fixedY = e.layerY / (canvasSizeX / canvas.height);
+    floodFill(ctx, fixedX, fixedY, color);
+    //floodFill(ctx, e.layerX, e.layerY, color);
   }
   if (properties.tool === 'eyedropper') {
     const sampleColor = rgbToHex(...ctx.getImageData(e.layerX, e.layerY, 1, 1).data);
