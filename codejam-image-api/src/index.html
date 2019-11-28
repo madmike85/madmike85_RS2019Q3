@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Codejam-canvas</title>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="menu">
+        <div class="hamburger">
+          <img src="../assets/img/menu.svg" alt="menu" />
+        </div>
+        <h1 class="menu-title">CodeJam - Pallete</h1>
+        <div class="dot-menu">
+          <img src="../assets/img/dot-menu icon.svg" alt="dot-menu" />
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="items-container instruments">
+        <ul class="items-conteiner-list">
+          <li class="list-item tool-item" data-tool="bucket">
+            <img src="../assets/img/icon-bucket.svg" alt="bucket" class="item-img" />
+            <p class="item-title">Paint bucket</p>
+          </li>
+          <li class="list-item tool-item" data-tool="eyedropper">
+            <img src="../assets/img/icon-eyedropper.svg" alt="eyedropper" class="item-img" />
+            <p class="item-title">Choose color</p>
+          </li>
+          <li class="list-item tool-item active" data-tool="pencil">
+            <img src="../assets/img/icon-pencil.svg" alt="pencil" class="item-img" />
+            <p class="item-title">Pencil</p>
+          </li>
+          <li class="list-item tool-item disabled">
+            <img src="../assets/img/icon-transform.svg" alt="transform" class="item-img" />
+            <p class="item-title">Transform</p>
+          </li>
+        </ul>
+      </div>
+      <div class="items-container colors">
+        <ul class="items-conteiner-list">
+          <li class="list-item palette-item current-color" data-color="#41f795">
+            <!-- <div class="color-sample"></div> -->
+            <div class="color-picker-wrapper">
+              <input type="color" value="#41f795" class="color-picker" />
+            </div>
+            <p class="item-title">Current color</p>
+          </li>
+          <li class="list-item palette-item prev-color" data-color="#ffa500">
+            <div class="color-sample "></div>
+            <p class="item-title">Prev color</p>
+          </li>
+        </ul>
+        <ul class="items-conteiner-list">
+          <li class="list-item palette-item" data-color="#f74141">
+            <div class="color-sample red"></div>
+            <p class="item-title">red</p>
+          </li>
+          <li class="list-item palette-item" data-color="#41b6f7">
+            <div class="color-sample blue"></div>
+            <p class="item-title">blue</p>
+          </li>
+        </ul>
+      </div>
+      <div class="canvas-wrapper">
+        <div class="top-row">
+          <div class="btn load-btn">Load</div>
+          <input type="text" class="search-field" />
+          <div class="btn clear-btn">Clear</div>
+          <div class="btn greyscale-btn">B&W</div>
+        </div>
+        <canvas id="canvas" width="512" height="512"></canvas>
+        <div class="range-slider">
+          <span class="range-slider__label">128</span>
+          <input class="range-slider__range" type="range" min="0" max="2" steps="1" value="0" />
+        </div>
+      </div>
+    </main>
+    <div class="alert-popup alert-popup--hidden">
+      <p>Please, load image for convertion</p>
+    </div>
+  </body>
+</html>
