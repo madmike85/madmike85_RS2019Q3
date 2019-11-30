@@ -209,11 +209,11 @@ const weatherBlock = [
               },
             ],
           },
-          {
-            tag: 'div',
-            classes: ['long-time-forecast'],
-          },
         ],
+      },
+      {
+        tag: 'div',
+        classes: ['long-time-forecast'],
       },
     ],
   },

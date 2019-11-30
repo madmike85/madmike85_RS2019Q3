@@ -123,7 +123,7 @@ async function getWeatherData(latitude, longitude, units) {
     const dateString = date.toLocaleString(PROPERTIES.lang, { weekday: 'long' });
     const temperature = ((item.temperatureHigh + item.temperatureLow) / 2).toFixed();
     NODES.longTermForcast.append(
-      createForecastCard(dateString, `${temperature}°`, '/assets/cloudy.svg')
+      createForecastCard(dateString, `${temperature}°`, '/assets/img/cloudy.svg')
     );
   });
   console.log(data);
@@ -198,3 +198,19 @@ function initMap() {
   PROPERTIES.map = myMap;
   PROPERTIES.map.setCenter([+PROPERTIES.location.latitude, +PROPERTIES.location.longitude], 9);
 }
+
+window.addEventListener('load', () => {
+  getDate(PROPERTIES.lang);
+  updateTime();
+  getLocalCoordinates();
+  // eslint-disable-next-line no-undef
+  ymaps.ready(initMap);
+});
+
+NODES.searchForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  PROPERTIES.location.name = NODES.searchField.value;
+  updateImage(setImgQueryString());
+  getCoordinatesFromLocation(NODES.searchField.value);
+  getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
+});
