@@ -56,7 +56,7 @@ const PROPERTIES = {
     longitude: null,
     name: null,
   },
-  lang: 'ru',
+  lang: 'en',
   units: 'si',
   map: null,
   mapPin: null,
@@ -146,11 +146,13 @@ function getLocalCoordinates() {
 }
 
 async function getCoordinatesFromLocation(location) {
-  const url = `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${PROPERTIES.opencageKey}`;
+  const url = `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${PROPERTIES.opencageKey}&language=${PROPERTIES.lang}`;
   const response = await fetch(url);
   const data = await response.json();
   console.log(data);
-  const place = data.results.sort((a, b) => a.confidence - b.confidence)[0];
+  const place = data.results
+    .filter((item) => item.components._type === 'city')
+    .sort((a, b) => a.confidence - b.confidence)[0];
   console.log(place);
   PROPERTIES.location.name = location;
   PROPERTIES.location.latitude = place.geometry.lat.toString();
