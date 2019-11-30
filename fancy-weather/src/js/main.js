@@ -100,3 +100,31 @@ async function updateImage(query) {
   PROPERTIES.imgUrl = data.urls.regular;
   document.body.style.backgroundImage = `linear-gradient(180deg, rgba(8,15,26,0.59) 0%, rgba(17,17,46,0.46) 100%),url(${PROPERTIES.imgUrl})`;
 }
+
+async function getWeatherData(latitude, longitude, units) {
+  const url = `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${PROPERTIES.darkskyKey}/${latitude},${longitude}?units=${units}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  NODES.temperature.innerText = data.currently.temperature.toFixed();
+  NODES.feelsLikeData.innerText = data.currently.apparentTemperature.toFixed();
+  NODES.condition.innerText = data.currently.summary;
+  NODES.windData.innerText = convertToMeterPerSecond(data.currently.windSpeed).toFixed();
+  NODES.humidityData.innerText = (data.currently.humidity * 100).toFixed();
+
+  const dailyForecast = data.daily.data.slice(0, 3);
+  deleteChildren(NODES.longTermForcast);
+  dailyForecast.forEach((item, i) => {
+    const currentDate = new Date();
+    const date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() + i + 1
+    );
+    const dateString = date.toLocaleString(PROPERTIES.lang, { weekday: 'long' });
+    const temperature = ((item.temperatureHigh + item.temperatureLow) / 2).toFixed();
+    NODES.longTermForcast.append(
+      createForecastCard(dateString, `${temperature}°`, '/assets/cloudy.svg')
+    );
+  });
+  console.log(data);
+}
