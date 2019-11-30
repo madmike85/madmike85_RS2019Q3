@@ -128,3 +128,35 @@ async function getWeatherData(latitude, longitude, units) {
   });
   console.log(data);
 }
+
+function getLocalCoordinates() {
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const { latitude, longitude } = pos.coords;
+    PROPERTIES.location = {
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+    };
+
+    NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
+    NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
+  });
+}
+
+async function getCoordinatesFromLocation(location) {
+  const url = `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${PROPERTIES.opencageKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const place = data.results.sort((a, b) => a.cconfidence - b.confidence)[0];
+  PROPERTIES.location.name = location;
+  PROPERTIES.location.latitude = place.geometry.lat.toString();
+  PROPERTIES.location.longitude = place.geometry.lng.toString();
+
+  PROPERTIES.map.setCenter([+PROPERTIES.location.latitude, +PROPERTIES.location.longitude], 9);
+  PROPERTIES.mapPin.geometry.setCoordinates([
+    +PROPERTIES.location.latitude,
+    +PROPERTIES.location.longitude,
+  ]);
+
+  NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
+  NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
+}
