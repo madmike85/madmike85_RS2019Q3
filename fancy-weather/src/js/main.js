@@ -185,3 +185,16 @@ function updateTime() {
 
   setTimeout(updateTime, 1000);
 }
+
+function initMap() {
+  // eslint-disable-next-line no-undef
+  const myMap = new ymaps.Map('map', {
+    center: [+PROPERTIES.location.latitude, +PROPERTIES.location.longitude],
+    zoom: 9,
+  });
+  PROPERTIES.mapPin = new ymaps.Placemark(myMap.getCenter());
+  myMap.geoObjects.add(PROPERTIES.mapPin);
+
+  PROPERTIES.map = myMap;
+  PROPERTIES.map.setCenter([+PROPERTIES.location.latitude, +PROPERTIES.location.longitude], 9);
+}
