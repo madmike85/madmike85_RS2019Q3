@@ -214,3 +214,17 @@ NODES.searchForm.addEventListener('submit', (e) => {
   getCoordinatesFromLocation(NODES.searchField.value);
   getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
 });
+
+NODES.buttonBlock.addEventListener('click', (e) => {
+  if (
+    e.target.classList.contains('refresh__btn') ||
+    e.target.parentNode.classList.contains('refresh__btn')
+  ) {
+    updateImage(setImgQueryString());
+  }
+
+  if (e.target.classList.contains('units__btn')) {
+    NODES.unitsButtons.forEach((button) => button.classList.add('btn--inactive'));
+    e.target.classList.remove('btn--inactive');
+  }
+});
