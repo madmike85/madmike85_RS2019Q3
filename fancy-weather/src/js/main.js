@@ -160,3 +160,28 @@ async function getCoordinatesFromLocation(location) {
   NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
   NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
 }
+
+function getDate(lang) {
+  const date = new Date();
+  const options = {
+    weekday: 'short',
+    month: 'long',
+    day: 'numeric',
+  };
+
+  NODES.date.innerText = date.toLocaleString(lang, options);
+}
+
+function updateTime() {
+  const date = new Date();
+
+  const h = date.getHours();
+  const m = date.getMinutes();
+
+  const hh = h < 10 ? `0${h}` : h;
+  const mm = m < 10 ? `0${m}` : m;
+
+  NODES.time.innerText = `${hh}:${mm}`;
+
+  setTimeout(updateTime, 1000);
+}
