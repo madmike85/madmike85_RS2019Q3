@@ -56,7 +56,7 @@ const PROPERTIES = {
     longitude: null,
     name: null,
   },
-  lang: 'en',
+  lang: 'ru',
   units: 'si',
   map: null,
   mapPin: null,
@@ -102,14 +102,17 @@ async function updateImage(query) {
 }
 
 async function getWeatherData(latitude, longitude, units) {
-  const url = `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${PROPERTIES.darkskyKey}/${latitude},${longitude}?units=${units}`;
+  const url = `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${PROPERTIES.darkskyKey}/${latitude},${longitude}?units=${units}&lang=${PROPERTIES.lang}`;
   const response = await fetch(url);
   const data = await response.json();
   NODES.temperature.innerText = data.currently.temperature.toFixed();
-  NODES.feelsLikeData.innerText = data.currently.apparentTemperature.toFixed();
+  NODES.feelsLikeData.innerText = `${data.currently.apparentTemperature.toFixed()}°`;
   NODES.condition.innerText = data.currently.summary;
-  NODES.windData.innerText = convertToMeterPerSecond(data.currently.windSpeed).toFixed();
-  NODES.humidityData.innerText = (data.currently.humidity * 100).toFixed();
+  NODES.windData.innerText =
+    PROPERTIES.units === 'si'
+      ? data.currently.windSpeed.toFixed()
+      : convertToMeterPerSecond(data.currently.windSpeed).toFixed();
+  NODES.humidityData.innerText = `${(data.currently.humidity * 100).toFixed()}%`;
 
   const dailyForecast = data.daily.data.slice(0, 3);
   deleteChildren(NODES.longTermForcast);
@@ -146,7 +149,9 @@ async function getCoordinatesFromLocation(location) {
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${PROPERTIES.opencageKey}`;
   const response = await fetch(url);
   const data = await response.json();
-  const place = data.results.sort((a, b) => a.cconfidence - b.confidence)[0];
+  console.log(data);
+  const place = data.results.sort((a, b) => a.confidence - b.confidence)[0];
+  console.log(place);
   PROPERTIES.location.name = location;
   PROPERTIES.location.latitude = place.geometry.lat.toString();
   PROPERTIES.location.longitude = place.geometry.lng.toString();
@@ -159,6 +164,7 @@ async function getCoordinatesFromLocation(location) {
 
   NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
   NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
+  NODES.region.innerText = `${place.components.city}, ${place.components.country}`;
 }
 
 function getDate(lang) {
