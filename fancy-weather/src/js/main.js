@@ -92,3 +92,11 @@ function createForecastCard(title, data, icon) {
 
   return forecastCard;
 }
+
+async function updateImage(query) {
+  const url = `https://api.unsplash.com/photos/random?query=${query},nature&client_id=${PROPERTIES.unsplashKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  PROPERTIES.imgUrl = data.urls.regular;
+  document.body.style.backgroundImage = `linear-gradient(180deg, rgba(8,15,26,0.59) 0%, rgba(17,17,46,0.46) 100%),url(${PROPERTIES.imgUrl})`;
+}
