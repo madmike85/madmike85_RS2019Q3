@@ -24,20 +24,20 @@ const controlBlock = [
               {
                 tag: 'option',
                 attributes: [
-                  ['value', 'EN'],
+                  ['value', 'en'],
                   ['selected', true],
                 ],
                 innerText: 'EN',
               },
               {
                 tag: 'option',
-                attributes: [['value', 'RU']],
+                attributes: [['value', 'ru']],
                 innerText: 'RU',
               },
               {
                 tag: 'option',
-                attributes: [['value', 'BY']],
-                innerText: 'BY',
+                attributes: [['value', 'be']],
+                innerText: 'BE',
               },
             ],
           },
@@ -48,11 +48,13 @@ const controlBlock = [
               {
                 tag: 'div',
                 classes: ['btn', 'btn--small', 'units__btn', 'farenheit__btn', 'btn--inactive'],
+                attributes: [['data-unit', 'us']],
                 innerText: '°F',
               },
               {
                 tag: 'div',
                 classes: ['btn', 'btn--small', 'units__btn', 'celsius__btn'],
+                attributes: [['data-unit', 'si']],
                 innerText: '°C',
               },
             ],
@@ -177,7 +179,7 @@ const weatherBlock = [
                     innerHtml: [
                       {
                         tag: 'span',
-                        classes: ['wind-tex'],
+                        classes: ['wind-text'],
                         innerText: 'wind: ',
                       },
                       {
@@ -238,7 +240,7 @@ const geolocationBlock = [
             innerHtml: [
               {
                 tag: 'span',
-                classes: ['latitude-tex'],
+                classes: ['latitude-text'],
                 innerText: 'Latitude: ',
               },
               {

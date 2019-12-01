@@ -1,10 +1,13 @@
+/* eslint-disable object-curly-newline */
 import initializeStructure from './initiation';
 import { convertToMeterPerSecond, deleteChildren, setImgQueryString, convertCoords } from './utils';
+import { dictionary } from './dictionary';
 
 initializeStructure();
 
 const TAGS = {
   buttonBlock: '.button-block',
+  langButton: '.lang__btn',
   unitsButtons: '.units__btn',
   searchField: '.search-field',
   searchForm: '.search-form',
@@ -27,6 +30,7 @@ const TAGS = {
 
 const NODES = {
   buttonBlock: document.querySelector(TAGS.buttonBlock),
+  langButton: document.querySelector(TAGS.langButton),
   unitsButtons: document.querySelectorAll(TAGS.unitsButtons),
   searchField: document.querySelector(TAGS.searchField),
   searchForm: document.querySelector(TAGS.searchForm),
@@ -50,7 +54,6 @@ const PROPERTIES = {
   unsplashKey: 'da77f8e93ce7acc3573e17bbcf1419d4faf4ee916d5eaba2720f14d388d62bc9',
   darkskyKey: '7051a81a7c46a27c23a3f618342a8e28',
   opencageKey: '1bbe3cf30f934f0ca470af6f7daeccbd',
-  imageUrl: null,
   location: {
     latitude: null,
     longitude: null,
@@ -60,6 +63,7 @@ const PROPERTIES = {
   units: 'si',
   map: null,
   mapPin: null,
+  timezone: null,
 };
 
 // console.log(NODES);
@@ -108,6 +112,7 @@ async function getWeatherData(latitude, longitude, units) {
   NODES.temperature.innerText = data.currently.temperature.toFixed();
   NODES.feelsLikeData.innerText = `${data.currently.apparentTemperature.toFixed()}°`;
   NODES.condition.innerText = data.currently.summary;
+  // eslint-disable-next-line operator-linebreak
   NODES.windData.innerText =
     PROPERTIES.units === 'si'
       ? data.currently.windSpeed.toFixed()
@@ -121,6 +126,7 @@ async function getWeatherData(latitude, longitude, units) {
     const date = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
+      // eslint-disable-next-line comma-dangle
       currentDate.getDate() + i + 1
     );
     const dateString = date.toLocaleString(PROPERTIES.lang, { weekday: 'long' });
@@ -151,12 +157,14 @@ async function getCoordinatesFromLocation(location) {
   const data = await response.json();
   console.log(data);
   const place = data.results
-    .filter((item) => item.components._type === 'city')
+    // eslint-disable-next-line no-underscore-dangle
+    .filter((item) => item.components._type === 'city' || item.components._type === 'state')
     .sort((a, b) => a.confidence - b.confidence)[0];
   console.log(place);
   PROPERTIES.location.name = location;
   PROPERTIES.location.latitude = place.geometry.lat.toString();
   PROPERTIES.location.longitude = place.geometry.lng.toString();
+  PROPERTIES.timezone = place.annotations.timezone.name;
 
   PROPERTIES.map.setCenter([+PROPERTIES.location.latitude, +PROPERTIES.location.longitude], 9);
   PROPERTIES.mapPin.geometry.setCoordinates([
@@ -166,7 +174,9 @@ async function getCoordinatesFromLocation(location) {
 
   NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
   NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
-  NODES.region.innerText = `${place.components.city}, ${place.components.country}`;
+  NODES.region.innerText = `${place.components.city || place.components.state}, ${
+    place.components.country
+  }`;
 }
 
 function getDate(lang) {
@@ -180,16 +190,32 @@ function getDate(lang) {
   NODES.date.innerText = date.toLocaleString(lang, options);
 }
 
+function updateLanguage() {
+  const submitBtn = NODES.submitButton;
+  const windText = document.querySelector('.wind-text');
+
+  const arr = [submitBtn, windText];
+
+  arr.forEach((node) => {
+    const idx = dictionary.findIndex((el) => node.classList.contains(el.class));
+    if (idx !== -1) {
+      node.innerText = dictionary[idx].text[PROPERTIES.lang];
+    }
+  });
+}
+
 function updateTime() {
   const date = new Date();
+  const options = {
+    hour: '2-digit',
+    minute: '2-digit',
+  };
 
-  const h = date.getHours();
-  const m = date.getMinutes();
+  if (PROPERTIES.timezone) {
+    options.timeZone = PROPERTIES.timezone;
+  }
 
-  const hh = h < 10 ? `0${h}` : h;
-  const mm = m < 10 ? `0${m}` : m;
-
-  NODES.time.innerText = `${hh}:${mm}`;
+  NODES.time.innerText = date.toLocaleString('ru', options);
 
   setTimeout(updateTime, 1000);
 }
@@ -200,6 +226,7 @@ function initMap() {
     center: [+PROPERTIES.location.latitude, +PROPERTIES.location.longitude],
     zoom: 9,
   });
+  // eslint-disable-next-line no-undef
   PROPERTIES.mapPin = new ymaps.Placemark(myMap.getCenter());
   myMap.geoObjects.add(PROPERTIES.mapPin);
 
@@ -232,7 +259,16 @@ NODES.buttonBlock.addEventListener('click', (e) => {
   }
 
   if (e.target.classList.contains('units__btn')) {
+    if (!e.target.classList.contains('btn--inactive')) return;
     NODES.unitsButtons.forEach((button) => button.classList.add('btn--inactive'));
     e.target.classList.remove('btn--inactive');
+    PROPERTIES.units = e.target.dataset.unit;
+    getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
+  }
+
+  if (e.target.classList.contains('lang__btn')) {
+    PROPERTIES.lang = e.target.value;
+    getDate(PROPERTIES.lang);
+    updateLanguage();
   }
 });

@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 function convertToMeterPerSecond(data) {
   return data * 0.447;
 }
