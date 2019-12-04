@@ -55,7 +55,27 @@ const dictionary = [
       be: 'Даўгата: ',
     },
   },
+  {
+    class: 'search-field',
+    text: {
+      en: 'Search city',
+      ru: 'Поиск по городу',
+      be: 'Пошук па горадзе',
+    },
+  },
 ];
 
-// eslint-disable-next-line import/prefer-default-export
-export { dictionary };
+const icons = {
+  'clear-day': '/assets/img/Sun.svg',
+  'clear-night': '/assets/img/Moon.svg',
+  rain: '/assets/img/Cloud-Rain.svg',
+  snow: '/assets/img/Cloud-Snow.svg',
+  sleet: '/assets/img/Cloud-Hail.svg',
+  wind: '/assets/img/Wind.svg',
+  fog: '/assets/img/Cloud-Fog-Alt.svg',
+  cloudy: '/assets/img/Cloud.svg',
+  'partly-cloudy-day': '/assets/img/Cloud-Sun.svg',
+  'partly-cloudy-night': '/assets/img/Cloud-Moon.svg',
+};
+
+export { dictionary, icons };

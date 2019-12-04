@@ -1,17 +1,19 @@
 /* eslint-disable object-curly-newline */
 import initializeStructure from './initiation';
 import { convertToMeterPerSecond, deleteChildren, setImgQueryString, convertCoords } from './utils';
-import { dictionary } from './dictionary';
+import { dictionary, icons } from './dictionary';
 
 initializeStructure();
 
 const TAGS = {
   buttonBlock: '.button-block',
+  refreshImg: '.refresh__img',
   langButton: '.lang__btn',
   unitsButtons: '.units__btn',
   searchField: '.search-field',
   searchForm: '.search-form',
   submitButton: '.btn__submit',
+  speechBtn: '.speech-input',
   region: '.title__region',
   date: '.title__date',
   time: '.title__time',
@@ -19,22 +21,30 @@ const TAGS = {
   weatherIcon: '.weather-icon',
   condition: '.condition',
   feelsLikeData: '.feels-like-data',
+  feelsLikeText: '.feels-like-text',
   windData: '.wind-data',
+  windText: '.wind-text',
+  windUnits: '.wind-units',
   humidityData: '.humidity-data',
+  humidityText: '.humidity-text',
   longTermForcast: '.long-time-forecast',
   forecastCard: '.forecast-card',
   map: '.map',
   latitude: '.latitude',
+  latitudeText: '.latitude-text',
   longitude: '.longitude',
+  longitudeText: '.longitude-text',
 };
 
 const NODES = {
   buttonBlock: document.querySelector(TAGS.buttonBlock),
+  refreshImg: document.querySelector(TAGS.refreshImg),
   langButton: document.querySelector(TAGS.langButton),
   unitsButtons: document.querySelectorAll(TAGS.unitsButtons),
   searchField: document.querySelector(TAGS.searchField),
   searchForm: document.querySelector(TAGS.searchForm),
   submitButton: document.querySelector(TAGS.submitButton),
+  speechBtn: document.querySelector(TAGS.speechBtn),
   region: document.querySelector(TAGS.region),
   date: document.querySelector(TAGS.date),
   time: document.querySelector(TAGS.time),
@@ -42,12 +52,19 @@ const NODES = {
   weatherIcon: document.querySelector(TAGS.weatherIcon),
   condition: document.querySelector(TAGS.condition),
   feelsLikeData: document.querySelector(TAGS.feelsLikeData),
+  feelsLikeText: document.querySelector(TAGS.feelsLikeText),
   windData: document.querySelector(TAGS.windData),
+  windText: document.querySelector(TAGS.windText),
+  windUnits: document.querySelector(TAGS.windUnits),
   humidityData: document.querySelector(TAGS.humidityData),
+  humidityText: document.querySelector(TAGS.humidityText),
   longTermForcast: document.querySelector(TAGS.longTermForcast),
   map: document.querySelector(TAGS.map),
   latitude: document.querySelector(TAGS.latitude),
+  latitudeText: document.querySelector(TAGS.latitudeText),
   longitude: document.querySelector(TAGS.longitude),
+  longitudeText: document.querySelector(TAGS.longitudeText),
+  placeholder: document.querySelector(TAGS.searchField, '::placeholder'),
 };
 
 const PROPERTIES = {
@@ -64,10 +81,17 @@ const PROPERTIES = {
   map: null,
   mapPin: null,
   timezone: null,
+  translationNodes: [
+    NODES.submitButton,
+    NODES.feelsLikeText,
+    NODES.windText,
+    NODES.windUnits,
+    NODES.humidityText,
+    NODES.latitudeText,
+    NODES.longitudeText,
+    NODES.placeholder,
+  ],
 };
-
-// console.log(NODES);
-// console.log(PROPERTIES);
 
 function createForecastCard(title, data, icon) {
   const forecastCard = document.createElement('div');
@@ -98,7 +122,7 @@ function createForecastCard(title, data, icon) {
 }
 
 async function updateImage(query) {
-  const url = `https://api.unsplash.com/photos/random?query=${query},nature&client_id=${PROPERTIES.unsplashKey}`;
+  const url = `https://api.unsplash.com/photos/random?query=town,${query}&client_id=${PROPERTIES.unsplashKey}`;
   const response = await fetch(url);
   const data = await response.json();
   PROPERTIES.imgUrl = data.urls.regular;
@@ -109,6 +133,7 @@ async function getWeatherData(latitude, longitude, units) {
   const url = `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${PROPERTIES.darkskyKey}/${latitude},${longitude}?units=${units}&lang=${PROPERTIES.lang}`;
   const response = await fetch(url);
   const data = await response.json();
+  NODES.weatherIcon.src = icons[data.currently.icon];
   NODES.temperature.innerText = data.currently.temperature.toFixed();
   NODES.feelsLikeData.innerText = `${data.currently.apparentTemperature.toFixed()}°`;
   NODES.condition.innerText = data.currently.summary;
@@ -132,23 +157,10 @@ async function getWeatherData(latitude, longitude, units) {
     const dateString = date.toLocaleString(PROPERTIES.lang, { weekday: 'long' });
     const temperature = ((item.temperatureHigh + item.temperatureLow) / 2).toFixed();
     NODES.longTermForcast.append(
-      createForecastCard(dateString, `${temperature}°`, '/assets/img/cloudy.svg')
+      createForecastCard(dateString, `${temperature}°`, icons[item.icon])
     );
   });
   console.log(data);
-}
-
-function getLocalCoordinates() {
-  navigator.geolocation.getCurrentPosition((pos) => {
-    const { latitude, longitude } = pos.coords;
-    PROPERTIES.location = {
-      latitude: latitude.toString(),
-      longitude: longitude.toString(),
-    };
-
-    NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
-    NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
-  });
 }
 
 async function getCoordinatesFromLocation(location) {
@@ -172,11 +184,50 @@ async function getCoordinatesFromLocation(location) {
     +PROPERTIES.location.longitude,
   ]);
 
+  getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
+
   NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
   NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
   NODES.region.innerText = `${place.components.city || place.components.state}, ${
     place.components.country
   }`;
+}
+
+async function getLocationFromCoordinates(latitude, longitude) {
+  const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}%2C+${longitude}&key=${PROPERTIES.opencageKey}&language=${PROPERTIES.lang}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const place = data.results[0];
+  console.log(data);
+  NODES.region.innerText = `${place.components.city || place.components.state}, ${
+    place.components.country
+  }`;
+  PROPERTIES.location.name = place.components.city || place.components.state;
+  console.log(`${place.components.city || place.components.state},${setImgQueryString()}`);
+  updateImage(`${place.components.city || place.components.state},${setImgQueryString()}`);
+}
+
+async function getLocalCoordinates() {
+  navigator.geolocation.getCurrentPosition((pos) => {
+    const { latitude, longitude } = pos.coords;
+    getLocationFromCoordinates(latitude, longitude);
+    getWeatherData(latitude, longitude, PROPERTIES.units);
+    PROPERTIES.location = {
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+    };
+    NODES.latitude.innerText = convertCoords(PROPERTIES.location.latitude);
+    NODES.longitude.innerText = convertCoords(PROPERTIES.location.longitude);
+    if (PROPERTIES.map) {
+      PROPERTIES.map.setCenter([+PROPERTIES.location.latitude, +PROPERTIES.location.longitude], 9);
+    }
+    if (PROPERTIES.mapPin) {
+      PROPERTIES.mapPin.geometry.setCoordinates([
+        +PROPERTIES.location.latitude,
+        +PROPERTIES.location.longitude,
+      ]);
+    }
+  });
 }
 
 function getDate(lang) {
@@ -191,15 +242,14 @@ function getDate(lang) {
 }
 
 function updateLanguage() {
-  const submitBtn = NODES.submitButton;
-  const windText = document.querySelector('.wind-text');
-
-  const arr = [submitBtn, windText];
-
-  arr.forEach((node) => {
+  PROPERTIES.translationNodes.forEach((node) => {
     const idx = dictionary.findIndex((el) => node.classList.contains(el.class));
     if (idx !== -1) {
-      node.innerText = dictionary[idx].text[PROPERTIES.lang];
+      if (node.hasAttribute('placeholder')) {
+        node.setAttribute('placeholder', dictionary[idx].text[PROPERTIES.lang]);
+      } else {
+        node.innerText = dictionary[idx].text[PROPERTIES.lang];
+      }
     }
   });
 }
@@ -235,19 +285,18 @@ function initMap() {
 }
 
 window.addEventListener('load', () => {
+  // eslint-disable-next-line no-undef
+  ymaps.ready(initMap);
   getDate(PROPERTIES.lang);
   updateTime();
   getLocalCoordinates();
-  // eslint-disable-next-line no-undef
-  ymaps.ready(initMap);
 });
 
 NODES.searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   PROPERTIES.location.name = NODES.searchField.value;
-  updateImage(setImgQueryString());
   getCoordinatesFromLocation(NODES.searchField.value);
-  getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
+  updateImage(`${NODES.searchField.value},${setImgQueryString()}`);
 });
 
 NODES.buttonBlock.addEventListener('click', (e) => {
@@ -255,7 +304,9 @@ NODES.buttonBlock.addEventListener('click', (e) => {
     e.target.classList.contains('refresh__btn') ||
     e.target.parentNode.classList.contains('refresh__btn')
   ) {
-    updateImage(setImgQueryString());
+    console.log(`${PROPERTIES.location.name},${setImgQueryString()}`);
+    updateImage(`${PROPERTIES.location.name},${setImgQueryString()}`);
+    NODES.refreshImg.classList.add('animation-rotate');
   }
 
   if (e.target.classList.contains('units__btn')) {
@@ -267,8 +318,19 @@ NODES.buttonBlock.addEventListener('click', (e) => {
   }
 
   if (e.target.classList.contains('lang__btn')) {
+    if (e.target.value === PROPERTIES.lang) return;
     PROPERTIES.lang = e.target.value;
     getDate(PROPERTIES.lang);
     updateLanguage();
+    getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
+    getLocationFromCoordinates(PROPERTIES.location.latitude, PROPERTIES.location.longitude);
   }
+});
+
+NODES.refreshImg.addEventListener('animationend', () => {
+  NODES.refreshImg.classList.remove('animation-rotate');
+});
+
+NODES.speechBtn.addEventListener('click', () => {
+  NODES.speechBtn.classList.add('animation-pulse');
 });

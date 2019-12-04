@@ -18,6 +18,32 @@ body {
   }
 }
 
+@keyframes rotate {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animation-rotate {
+  animation: rotate 2s ease;
+}
+
+.animation-pulse {
+  animation: pulse 0.7s infinite alternate;
+}
+
 .header {
   width: 87%;
   margin: 0 auto;
@@ -159,9 +185,11 @@ body {
   right: 119px;
   top: 13px;
   opacity: 0.4;
+  transition: all ease 0.5s;
 
   &:hover {
     cursor: pointer;
+    opacity: 1;
   }
 }
 
@@ -306,6 +334,8 @@ body {
   width: 162px;
   height: 102px;
   margin-bottom: 44px;
+  object-fit: cover;
+  filter: invert(1);
 
   @media screen and (max-width: 579px) {
     width: 142px;
@@ -367,8 +397,10 @@ body {
 }
 
 .card__icon {
-  width: 67px;
-  height: 44px;
+  width: 70px;
+  height: 55px;
+  object-fit: cover;
+  filter: invert(1);
 }
 
 .geolocation-block {

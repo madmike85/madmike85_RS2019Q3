@@ -13,6 +13,7 @@ const controlBlock = [
             innerHtml: [
               {
                 tag: 'img',
+                classes: ['refresh__img'],
                 attributes: [['src', '../assets/img/refresh.svg']],
               },
             ],
@@ -70,7 +71,7 @@ const controlBlock = [
             classes: ['search-field'],
             attributes: [
               ['type', 'text'],
-              ['placeholder', 'Search city or ZIP'],
+              ['placeholder', 'Search city'],
             ],
           },
           {
@@ -150,7 +151,6 @@ const weatherBlock = [
               {
                 tag: 'img',
                 classes: ['weather-icon'],
-                attributes: [['src', '../assets/img/gloomy.svg']],
               },
               {
                 tag: 'div',
