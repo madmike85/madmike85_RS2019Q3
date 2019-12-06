@@ -1,6 +1,12 @@
 /* eslint-disable object-curly-newline */
 import initializeStructure from './initiation';
-import { convertToMeterPerSecond, deleteChildren, setImgQueryString, convertCoords } from './utils';
+import {
+  convertToMeterPerSecond,
+  deleteChildren,
+  setImgQueryString,
+  convertCoords,
+  createForecastCard,
+} from './utils';
 import { dictionary, icons } from './dictionary';
 
 initializeStructure();
@@ -93,34 +99,6 @@ const PROPERTIES = {
   ],
 };
 
-function createForecastCard(title, data, icon) {
-  const forecastCard = document.createElement('div');
-  forecastCard.classList.add('forecast-card');
-
-  const cardTitle = document.createElement('h2');
-  cardTitle.classList.add('card__title');
-  cardTitle.innerText = title;
-
-  const cardBody = document.createElement('div');
-  cardBody.classList.add('card__body');
-
-  const cardData = document.createElement('p');
-  cardData.classList.add('card__data');
-  cardData.innerText = data;
-
-  const cardIcon = document.createElement('img');
-  cardIcon.classList.add('card__icon');
-  cardIcon.setAttribute('src', icon);
-
-  cardBody.append(cardData);
-  cardBody.append(cardIcon);
-
-  forecastCard.append(cardTitle);
-  forecastCard.append(cardBody);
-
-  return forecastCard;
-}
-
 async function updateImage(query) {
   const url = `https://api.unsplash.com/photos/random?query=town,${query}&client_id=${PROPERTIES.unsplashKey}`;
   const response = await fetch(url);
@@ -152,12 +130,12 @@ async function getWeatherData(latitude, longitude, units) {
       currentDate.getFullYear(),
       currentDate.getMonth(),
       // eslint-disable-next-line comma-dangle
-      currentDate.getDate() + i + 1
+      currentDate.getDate() + i + 1,
     );
     const dateString = date.toLocaleString(PROPERTIES.lang, { weekday: 'long' });
     const temperature = ((item.temperatureHigh + item.temperatureLow) / 2).toFixed();
     NODES.longTermForcast.append(
-      createForecastCard(dateString, `${temperature}°`, icons[item.icon])
+      createForecastCard(dateString, `${temperature}°`, icons[item.icon]),
     );
   });
   console.log(data);

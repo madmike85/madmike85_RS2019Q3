@@ -21,7 +21,7 @@ function setImgQueryString() {
     queryString += 'summer';
   } else if (month <= 4) {
     queryString += 'spring';
-  } else if (month >= 11 && month <= 1) {
+  } else if (month >= 11 || month <= 1) {
     queryString += 'winter';
   }
 
@@ -37,4 +37,38 @@ function convertCoords(coords) {
   return `${coords.slice(0, dotIdx)}°${coords.slice(dotIdx + 1, dotIdx + 3)}'`;
 }
 
-export { convertToMeterPerSecond, deleteChildren, setImgQueryString, convertCoords };
+function createForecastCard(title, data, icon) {
+  const forecastCard = document.createElement('div');
+  forecastCard.classList.add('forecast-card');
+
+  const cardTitle = document.createElement('h2');
+  cardTitle.classList.add('card__title');
+  cardTitle.innerText = title;
+
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card__body');
+
+  const cardData = document.createElement('p');
+  cardData.classList.add('card__data');
+  cardData.innerText = data;
+
+  const cardIcon = document.createElement('img');
+  cardIcon.classList.add('card__icon');
+  cardIcon.setAttribute('src', icon);
+
+  cardBody.append(cardData);
+  cardBody.append(cardIcon);
+
+  forecastCard.append(cardTitle);
+  forecastCard.append(cardBody);
+
+  return forecastCard;
+}
+
+export {
+  convertToMeterPerSecond,
+  deleteChildren,
+  setImgQueryString,
+  convertCoords,
+  createForecastCard,
+};
