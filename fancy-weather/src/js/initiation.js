@@ -33,4 +33,5 @@ export default function initializeStructure() {
   createBlock(weatherBlock, mainContainer);
   createBlock(geolocationBlock, mainContainer);
   document.body.append(mainContainer);
+  window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
 }

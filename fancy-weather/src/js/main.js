@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable object-curly-newline */
 import initializeStructure from './initiation';
 import {
@@ -97,6 +98,7 @@ const PROPERTIES = {
     NODES.longitudeText,
     NODES.placeholder,
   ],
+  speechRecognition: new window.SpeechRecognition(),
 };
 
 async function updateImage(query) {
@@ -181,7 +183,6 @@ async function getLocationFromCoordinates(latitude, longitude) {
     place.components.country
   }`;
   PROPERTIES.location.name = place.components.city || place.components.state;
-  console.log(`${place.components.city || place.components.state},${setImgQueryString()}`);
   updateImage(`${place.components.city || place.components.state},${setImgQueryString()}`);
 }
 
@@ -206,6 +207,24 @@ async function getLocalCoordinates() {
       ]);
     }
   });
+}
+
+function speechSearch() {
+  let finalTranscript = '';
+  PROPERTIES.speechRecognition.interimResults = false;
+  PROPERTIES.speechRecognition.continuous = false;
+  PROPERTIES.speechRecognition.onresult = (e) => {
+    for (let i = e.resultIndex; i < e.results.length; i += 1) {
+      const { transcript } = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        finalTranscript += transcript;
+      }
+    }
+
+    NODES.searchField.value = finalTranscript;
+    getCoordinatesFromLocation(finalTranscript);
+    updateImage(`${finalTranscript},${setImgQueryString()}`);
+  };
 }
 
 function getDate(lang) {
@@ -282,7 +301,6 @@ NODES.buttonBlock.addEventListener('click', (e) => {
     e.target.classList.contains('refresh__btn') ||
     e.target.parentNode.classList.contains('refresh__btn')
   ) {
-    console.log(`${PROPERTIES.location.name},${setImgQueryString()}`);
     updateImage(`${PROPERTIES.location.name},${setImgQueryString()}`);
     NODES.refreshImg.classList.add('animation-rotate');
   }
@@ -311,4 +329,9 @@ NODES.refreshImg.addEventListener('animationend', () => {
 
 NODES.speechBtn.addEventListener('click', () => {
   NODES.speechBtn.classList.add('animation-pulse');
+  PROPERTIES.speechRecognition.start();
+});
+
+PROPERTIES.speechRecognition.addEventListener('end', () => {
+  NODES.speechBtn.classList.remove('animation-pulse');
 });
