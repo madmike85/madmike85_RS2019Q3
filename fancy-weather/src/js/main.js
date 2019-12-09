@@ -11,6 +11,7 @@ import {
 import { dictionary, icons } from './dictionary';
 
 initializeStructure();
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const TAGS = {
   buttonBlock: '.button-block',
@@ -98,11 +99,11 @@ const PROPERTIES = {
     NODES.longitudeText,
     NODES.placeholder,
   ],
-  speechRecognition: new window.SpeechRecognition(),
+  speechRecognition: new SpeechRecognition(),
 };
 
 async function updateImage(query) {
-  const url = `https://api.unsplash.com/photos/random?query=town,${query}&client_id=${PROPERTIES.unsplashKey}`;
+  const url = `https://api.unsplash.com/photos/random?query=nature,${query}&client_id=${PROPERTIES.unsplashKey}`;
   const response = await fetch(url);
   const data = await response.json();
   PROPERTIES.imgUrl = data.urls.regular;
@@ -183,7 +184,7 @@ async function getLocationFromCoordinates(latitude, longitude) {
     place.components.country
   }`;
   PROPERTIES.location.name = place.components.city || place.components.state;
-  updateImage(`${place.components.city || place.components.state},${setImgQueryString()}`);
+  updateImage(setImgQueryString());
 }
 
 async function getLocalCoordinates() {
@@ -207,24 +208,6 @@ async function getLocalCoordinates() {
       ]);
     }
   });
-}
-
-function speechSearch() {
-  let finalTranscript = '';
-  PROPERTIES.speechRecognition.interimResults = false;
-  PROPERTIES.speechRecognition.continuous = false;
-  PROPERTIES.speechRecognition.onresult = (e) => {
-    for (let i = e.resultIndex; i < e.results.length; i += 1) {
-      const { transcript } = e.results[i][0].transcript;
-      if (e.results[i].isFinal) {
-        finalTranscript += transcript;
-      }
-    }
-
-    NODES.searchField.value = finalTranscript;
-    getCoordinatesFromLocation(finalTranscript);
-    updateImage(`${finalTranscript},${setImgQueryString()}`);
-  };
 }
 
 function getDate(lang) {
@@ -293,7 +276,7 @@ NODES.searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   PROPERTIES.location.name = NODES.searchField.value;
   getCoordinatesFromLocation(NODES.searchField.value);
-  updateImage(`${NODES.searchField.value},${setImgQueryString()}`);
+  updateImage(setImgQueryString());
 });
 
 NODES.buttonBlock.addEventListener('click', (e) => {
@@ -301,7 +284,7 @@ NODES.buttonBlock.addEventListener('click', (e) => {
     e.target.classList.contains('refresh__btn') ||
     e.target.parentNode.classList.contains('refresh__btn')
   ) {
-    updateImage(`${PROPERTIES.location.name},${setImgQueryString()}`);
+    updateImage(setImgQueryString());
     NODES.refreshImg.classList.add('animation-rotate');
   }
 
@@ -329,9 +312,18 @@ NODES.refreshImg.addEventListener('animationend', () => {
 
 NODES.speechBtn.addEventListener('click', () => {
   NODES.speechBtn.classList.add('animation-pulse');
+  PROPERTIES.speechRecognition.lang = PROPERTIES.lang;
   PROPERTIES.speechRecognition.start();
 });
 
 PROPERTIES.speechRecognition.addEventListener('end', () => {
   NODES.speechBtn.classList.remove('animation-pulse');
+});
+
+PROPERTIES.speechRecognition.addEventListener('result', (event) => {
+  const finalTranscript = event.result[0][0].transcript;
+  NODES.searchField.focus();
+  NODES.searchField.value = finalTranscript;
+  getCoordinatesFromLocation(NODES.searchField.value);
+  updateImage(setImgQueryString());
 });

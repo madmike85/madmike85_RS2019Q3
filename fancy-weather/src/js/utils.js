@@ -9,10 +9,10 @@ function deleteChildren(root) {
   }
 }
 
-function setImgQueryString() {
+function setImgQueryString(dateNode) {
   const date = new Date();
   const month = date.getMonth();
-  const hours = date.getHours();
+  const [hours, minutes] = dateNode.textContent.split(':');
   let queryString = '';
 
   if (month <= 10) {
@@ -25,7 +25,7 @@ function setImgQueryString() {
     queryString += 'winter';
   }
 
-  if (hours > 23 || hours <= 6) {
+  if (+hours > 23 || +hours <= 6) {
     queryString += ',night';
   }
 
