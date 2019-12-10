@@ -14,6 +14,7 @@ initializeStructure();
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const TAGS = {
+  spinner: '.loader',
   buttonBlock: '.button-block',
   refreshImg: '.refresh__img',
   langButton: '.lang__btn',
@@ -45,6 +46,7 @@ const TAGS = {
 };
 
 const NODES = {
+  spinner: document.querySelector(TAGS.spinner),
   buttonBlock: document.querySelector(TAGS.buttonBlock),
   refreshImg: document.querySelector(TAGS.refreshImg),
   langButton: document.querySelector(TAGS.langButton),
@@ -111,6 +113,7 @@ async function updateImage(query) {
 }
 
 async function getWeatherData(latitude, longitude, units) {
+  NODES.spinner.classList.add('loading');
   const url = `https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/${PROPERTIES.darkskyKey}/${latitude},${longitude}?units=${units}&lang=${PROPERTIES.lang}`;
   const response = await fetch(url);
   const data = await response.json();
@@ -141,6 +144,7 @@ async function getWeatherData(latitude, longitude, units) {
       createForecastCard(dateString, `${temperature}°`, icons[item.icon]),
     );
   });
+  NODES.spinner.classList.remove('loading');
   console.log(data);
 }
 
@@ -184,7 +188,7 @@ async function getLocationFromCoordinates(latitude, longitude) {
     place.components.country
   }`;
   PROPERTIES.location.name = place.components.city || place.components.state;
-  updateImage(setImgQueryString());
+  updateImage(setImgQueryString(NODES.time));
 }
 
 async function getLocalCoordinates() {
@@ -276,7 +280,7 @@ NODES.searchForm.addEventListener('submit', (e) => {
   e.preventDefault();
   PROPERTIES.location.name = NODES.searchField.value;
   getCoordinatesFromLocation(NODES.searchField.value);
-  updateImage(setImgQueryString());
+  updateImage(setImgQueryString(NODES.time));
 });
 
 NODES.buttonBlock.addEventListener('click', (e) => {
@@ -284,7 +288,7 @@ NODES.buttonBlock.addEventListener('click', (e) => {
     e.target.classList.contains('refresh__btn') ||
     e.target.parentNode.classList.contains('refresh__btn')
   ) {
-    updateImage(setImgQueryString());
+    updateImage(setImgQueryString(NODES.time));
     NODES.refreshImg.classList.add('animation-rotate');
   }
 
@@ -325,5 +329,5 @@ PROPERTIES.speechRecognition.addEventListener('result', (event) => {
   NODES.searchField.focus();
   NODES.searchField.value = finalTranscript;
   getCoordinatesFromLocation(NODES.searchField.value);
-  updateImage(setImgQueryString());
+  updateImage(setImgQueryString(NODES.time));
 });

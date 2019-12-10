@@ -12,7 +12,7 @@ function deleteChildren(root) {
 function setImgQueryString(dateNode) {
   const date = new Date();
   const month = date.getMonth();
-  const [hours, minutes] = dateNode.textContent.split(':');
+  const [hours] = dateNode.textContent.split(':');
   let queryString = '';
 
   if (month <= 10) {

@@ -1,3 +1,17 @@
+/* eslint-disable object-curly-newline */
+const spinner = [
+  {
+    tag: 'div',
+    classes: ['loader', 'loading'],
+    innerHtml: [
+      {
+        tag: 'div',
+        classes: ['spinner'],
+      },
+    ],
+  },
+];
+
 const controlBlock = [
   {
     tag: 'header',
@@ -269,4 +283,4 @@ const geolocationBlock = [
   },
 ];
 
-export { controlBlock, weatherBlock, geolocationBlock };
+export { spinner, controlBlock, weatherBlock, geolocationBlock };

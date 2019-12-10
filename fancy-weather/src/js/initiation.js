@@ -1,4 +1,5 @@
-import { controlBlock, weatherBlock, geolocationBlock } from './elements';
+/* eslint-disable object-curly-newline */
+import { spinner, controlBlock, weatherBlock, geolocationBlock } from './elements';
 
 function createBlock(obj, root) {
   obj.forEach((o) => {
@@ -29,6 +30,7 @@ export default function initializeStructure() {
   const mainContainer = document.createElement('div');
   mainContainer.classList.add('main-container');
 
+  createBlock(spinner, document.body);
   createBlock(controlBlock, document.body);
   createBlock(weatherBlock, mainContainer);
   createBlock(geolocationBlock, mainContainer);
