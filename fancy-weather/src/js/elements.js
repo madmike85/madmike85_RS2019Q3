@@ -38,10 +38,7 @@ const controlBlock = [
             innerHtml: [
               {
                 tag: 'option',
-                attributes: [
-                  ['value', 'en'],
-                  ['selected', true],
-                ],
+                attributes: [['value', 'en']],
                 innerText: 'EN',
               },
               {
@@ -68,7 +65,7 @@ const controlBlock = [
               },
               {
                 tag: 'div',
-                classes: ['btn', 'btn--small', 'units__btn', 'celsius__btn'],
+                classes: ['btn', 'btn--small', 'units__btn', 'celsius__btn', 'btn--inactive'],
                 attributes: [['data-unit', 'si']],
                 innerText: '°C',
               },

@@ -18,6 +18,7 @@ const TAGS = {
   buttonBlock: '.button-block',
   refreshImg: '.refresh__img',
   langButton: '.lang__btn',
+  langOptions: 'option',
   unitsButtons: '.units__btn',
   searchField: '.search-field',
   searchForm: '.search-form',
@@ -50,6 +51,7 @@ const NODES = {
   buttonBlock: document.querySelector(TAGS.buttonBlock),
   refreshImg: document.querySelector(TAGS.refreshImg),
   langButton: document.querySelector(TAGS.langButton),
+  langOptions: document.querySelectorAll(TAGS.langOptions),
   unitsButtons: document.querySelectorAll(TAGS.unitsButtons),
   searchField: document.querySelector(TAGS.searchField),
   searchForm: document.querySelector(TAGS.searchForm),
@@ -86,8 +88,8 @@ const PROPERTIES = {
     longitude: null,
     name: null,
   },
-  lang: 'en',
-  units: 'si',
+  lang: localStorage.getItem('lang') || 'en',
+  units: localStorage.getItem('units') || 'si',
   map: null,
   mapPin: null,
   timezone: null,
@@ -274,6 +276,18 @@ window.addEventListener('load', () => {
   getDate(PROPERTIES.lang);
   updateTime();
   getLocalCoordinates();
+  updateLanguage();
+  NODES.langOptions.forEach((item) => {
+    if (item.value === PROPERTIES.lang) {
+      item.setAttribute('selected', true);
+    }
+  });
+  NODES.unitsButtons.forEach((btn) => {
+    if (btn.dataset.unit === PROPERTIES.units) {
+      btn.classList.remove('btn--inactive');
+    }
+  });
+  console.log(PROPERTIES);
 });
 
 NODES.searchForm.addEventListener('submit', (e) => {
@@ -297,12 +311,14 @@ NODES.buttonBlock.addEventListener('click', (e) => {
     NODES.unitsButtons.forEach((button) => button.classList.add('btn--inactive'));
     e.target.classList.remove('btn--inactive');
     PROPERTIES.units = e.target.dataset.unit;
+    localStorage.setItem('units', e.target.dataset.unit);
     getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
   }
 
   if (e.target.classList.contains('lang__btn')) {
     if (e.target.value === PROPERTIES.lang) return;
     PROPERTIES.lang = e.target.value;
+    localStorage.setItem('lang', e.target.value);
     getDate(PROPERTIES.lang);
     updateLanguage();
     getWeatherData(PROPERTIES.location.latitude, PROPERTIES.location.longitude, PROPERTIES.units);
