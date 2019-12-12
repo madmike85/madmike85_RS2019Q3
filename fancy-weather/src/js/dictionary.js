@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 const dictionary = [
   {
     class: 'btn__submit',

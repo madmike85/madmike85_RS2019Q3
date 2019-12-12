@@ -8,7 +8,7 @@ import {
   convertCoords,
   createForecastCard,
 } from './utils';
-import { dictionary, icons, days, month, months } from './dictionary';
+import { dictionary, icons, days, months } from './dictionary';
 
 initializeStructure();
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -217,10 +217,6 @@ async function getLocalCoordinates() {
 
 function getDate(lang) {
   const date = new Date();
-  const options = {
-    day: 'numeric',
-  };
-
   const dateString = `${days[PROPERTIES.lang][date.getDay()]}, ${
     months[PROPERTIES.lang][date.getMonth()]
   } ${date.getDate()}`;
