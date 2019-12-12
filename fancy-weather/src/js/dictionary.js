@@ -78,4 +78,55 @@ const icons = {
   'partly-cloudy-night': '/assets/img/Cloud-Moon.svg',
 };
 
-export { dictionary, icons };
+const days = {
+  en: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+  ru: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+  be: ['нядзеля', 'панядзелак', 'аўторак', 'серада', 'чацвер', 'пятніца', 'субота'],
+};
+
+const months = {
+  en: [
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december',
+  ],
+  ru: [
+    'январь',
+    'февраль',
+    'март',
+    'апрель',
+    'май',
+    'июнь',
+    'июль',
+    'август',
+    'сентябрь',
+    'октябрь',
+    'ноябрь',
+    'декабрь',
+  ],
+  be: [
+    'студзеня',
+    'лютага',
+    'сакавіка',
+    'красавіка',
+    'мая',
+    'чэрвеня',
+    'ліпеня',
+    'жніўня',
+    'верасня',
+    'кастрычніка',
+    'лістапада',
+    'снежня',
+  ],
+};
+
+export { dictionary, icons, days, months };

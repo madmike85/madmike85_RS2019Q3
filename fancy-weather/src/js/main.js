@@ -8,7 +8,7 @@ import {
   convertCoords,
   createForecastCard,
 } from './utils';
-import { dictionary, icons } from './dictionary';
+import { dictionary, icons, days, month, months } from './dictionary';
 
 initializeStructure();
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -140,10 +140,9 @@ async function getWeatherData(latitude, longitude, units) {
       // eslint-disable-next-line comma-dangle
       currentDate.getDate() + i + 1,
     );
-    const dateString = date.toLocaleString(PROPERTIES.lang, { weekday: 'long' });
     const temperature = ((item.temperatureHigh + item.temperatureLow) / 2).toFixed();
     NODES.longTermForcast.append(
-      createForecastCard(dateString, `${temperature}°`, icons[item.icon]),
+      createForecastCard(days[PROPERTIES.lang][date.getDay()], `${temperature}°`, icons[item.icon]),
     );
   });
   NODES.spinner.classList.remove('loading');
@@ -219,12 +218,14 @@ async function getLocalCoordinates() {
 function getDate(lang) {
   const date = new Date();
   const options = {
-    weekday: 'short',
-    month: 'long',
     day: 'numeric',
   };
 
-  NODES.date.innerText = date.toLocaleString(lang, options);
+  const dateString = `${days[PROPERTIES.lang][date.getDay()]}, ${
+    months[PROPERTIES.lang][date.getMonth()]
+  } ${date.getDate()}`;
+
+  NODES.date.innerText = dateString;
 }
 
 function updateLanguage() {
