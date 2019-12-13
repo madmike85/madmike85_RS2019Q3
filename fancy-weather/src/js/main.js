@@ -141,7 +141,8 @@ async function getWeatherData(latitude, longitude, units) {
       currentDate.getDate() + i + 1,
     );
     const temperature = ((item.temperatureHigh + item.temperatureLow) / 2).toFixed();
-    NODES.longTermForcast.append(
+    NODES.longTermForcast.insertAdjacentHTML(
+      'beforeend',
       createForecastCard(days[PROPERTIES.lang][date.getDay()], `${temperature}°`, icons[item.icon]),
     );
   });

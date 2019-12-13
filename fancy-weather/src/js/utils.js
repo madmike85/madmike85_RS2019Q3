@@ -38,31 +38,15 @@ function convertCoords(coords) {
 }
 
 function createForecastCard(title, data, icon) {
-  const forecastCard = document.createElement('div');
-  forecastCard.classList.add('forecast-card');
+  const card = `<div class="forecast-card">
+    <h2 class="card__title">${title}</h2>
+    <div class="card__body">
+      <p class="card__data">${data}</p>
+      <img class="card__icon" src="${icon}">
+    </div>
+  </div>`;
 
-  const cardTitle = document.createElement('h2');
-  cardTitle.classList.add('card__title');
-  cardTitle.innerText = title;
-
-  const cardBody = document.createElement('div');
-  cardBody.classList.add('card__body');
-
-  const cardData = document.createElement('p');
-  cardData.classList.add('card__data');
-  cardData.innerText = data;
-
-  const cardIcon = document.createElement('img');
-  cardIcon.classList.add('card__icon');
-  cardIcon.setAttribute('src', icon);
-
-  cardBody.append(cardData);
-  cardBody.append(cardIcon);
-
-  forecastCard.append(cardTitle);
-  forecastCard.append(cardBody);
-
-  return forecastCard;
+  return card;
 }
 
 export {
