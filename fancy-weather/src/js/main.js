@@ -218,8 +218,8 @@ async function getLocalCoordinates() {
 
 function getDate(lang) {
   const date = new Date();
-  const dateString = `${days[PROPERTIES.lang][date.getDay()]}, ${
-    months[PROPERTIES.lang][date.getMonth()]
+  const dateString = `${days[lang][date.getDay()]}, ${
+    months[lang][date.getMonth()]
   } ${date.getDate()}`;
 
   NODES.date.innerText = dateString;
