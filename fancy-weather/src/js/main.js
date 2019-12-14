@@ -147,19 +147,16 @@ async function getWeatherData(latitude, longitude, units) {
     );
   });
   NODES.spinner.classList.remove('loading');
-  console.log(data);
 }
 
 async function getCoordinatesFromLocation(location) {
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${location}&key=${PROPERTIES.opencageKey}&language=${PROPERTIES.lang}`;
   const response = await fetch(url);
   const data = await response.json();
-  console.log(data);
   const place = data.results
     // eslint-disable-next-line no-underscore-dangle
     .filter((item) => item.components._type === 'city' || item.components._type === 'state')
     .sort((a, b) => a.confidence - b.confidence)[0];
-  console.log(place);
   PROPERTIES.location.name = location;
   PROPERTIES.location.latitude = place.geometry.lat.toString();
   PROPERTIES.location.longitude = place.geometry.lng.toString();
@@ -185,7 +182,6 @@ async function getLocationFromCoordinates(latitude, longitude) {
   const response = await fetch(url);
   const data = await response.json();
   const place = data.results[0];
-  console.log(data);
   NODES.region.innerText = `${place.components.city || place.components.state}, ${
     place.components.country
   }`;
@@ -285,7 +281,6 @@ window.addEventListener('load', () => {
       btn.classList.remove('btn--inactive');
     }
   });
-  console.log(PROPERTIES);
 });
 
 NODES.searchForm.addEventListener('submit', (e) => {
