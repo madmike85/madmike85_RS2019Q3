@@ -1,4 +1,4 @@
-.menu-wrapper {
+.menu {
   display: flex;
   align-items: center;
   position: absolute;
@@ -30,6 +30,7 @@
 
   &.selected {
     border-left: 2px solid #ffd700;
+    background-color: #444;
   }
 }
 

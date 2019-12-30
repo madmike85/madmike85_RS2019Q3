@@ -1,0 +1,78 @@
+import { shortcuts } from '../utils/shortcuts';
+
+const TAGS = {
+  createSpriteBtn: '.btn-create-sprite',
+  sizePanel: '.sizes-panel',
+  sizeElements: '.size-panel__element',
+  toolsGrid: '.tools-grid',
+  tools: '.tools-grid__element',
+  palleteWrapper: '.pallete-wrapper',
+  primaryColor: '.primary-color-picker',
+  secondaryColor: '.secondary-color-picker',
+  frames: '.frame',
+  addFrameBtn: '.add-frame-btn',
+  cheatsheetBtn: '.cheatsheet-btn',
+  mainCanvas: '#canvas',
+  previewCanvas: '.preview-canvas',
+  fullscreenBtn: '.fullscreen-btn',
+  frameSliderLable: '.frame-slider__lable',
+  frameSliderRange: '.frame-slider__range',
+  menu: '.menu',
+  menuBtnHolder: '.menu-btn-holder',
+  menuBtns: '.menu-btn',
+  resizeMenu: '.resize-menu',
+  saveMenu: '.save-menu',
+  widthInput: '.width-input',
+  heightInput: '.height-input',
+  presets: '[data-preset]',
+  modal: '.modal',
+  closeBtn: '.header__close',
+  shortcutValues: '.shortcut-value',
+  restoreDefault: '.restore-default-btn',
+};
+
+const NODES = {
+  createSpriteBtn: document.querySelector(TAGS.createSpriteBtn),
+  sizePanel: document.querySelector(TAGS.sizePanel),
+  sizeElements: document.querySelectorAll(TAGS.sizeElements),
+  toolsGrid: document.querySelector(TAGS.toolsGrid),
+  tools: document.querySelectorAll(TAGS.tools),
+  palletWrapper: document.querySelector(TAGS.palleteWrapper),
+  primaryColor: document.querySelector(TAGS.primaryColor),
+  secondaryColor: document.querySelector(TAGS.secondaryColor),
+  frames: document.querySelectorAll(TAGS.frames),
+  addFrameBtn: document.querySelector(TAGS.addFrameBtn),
+  cheatsheetBtn: document.querySelector(TAGS.cheatsheetBtn),
+  mainCanvas: document.querySelector(TAGS.mainCanvas),
+  previewCanvas: document.querySelector(TAGS.previewCanvas),
+  fullscreenBtn: document.querySelector(TAGS.fullscreenBtn),
+  frameSliderLable: document.querySelector(TAGS.frameSliderLable),
+  frameSliderRange: document.querySelector(TAGS.frameSliderRange),
+  menu: document.querySelector(TAGS.menu),
+  menuBtnHolder: document.querySelector(TAGS.menuBtnHolder),
+  menuBtns: document.querySelectorAll(TAGS.menuBtns),
+  resizeMenu: document.querySelector(TAGS.resizeMenu),
+  saveMenu: document.querySelector(TAGS.saveMenu),
+  widthInput: document.querySelector(TAGS.widthInput),
+  heightInput: document.querySelector(TAGS.heightInput),
+  presets: document.querySelectorAll(TAGS.presets),
+  modal: document.querySelector(TAGS.modal),
+  closeBtn: document.querySelector(TAGS.closeBtn),
+  shortcutValues: document.querySelectorAll(TAGS.shortcutValues),
+  restoreDefault: document.querySelector(TAGS.restoreDefault),
+};
+
+const PROPERTIES = {
+  frames: [
+    {
+      id: 0,
+      data: null,
+    },
+  ],
+  primary: null,
+  secondary: null,
+  defaulShortcuts: shortcuts,
+  currentShortcuts: shortcuts.slice(),
+};
+
+export { TAGS, NODES, PROPERTIES };
