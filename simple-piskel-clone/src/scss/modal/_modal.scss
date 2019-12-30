@@ -108,6 +108,15 @@
   }
 }
 
+@keyframes pulse {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .shortcut-value {
   width: 30px;
   height: 30px;
@@ -119,6 +128,15 @@
   border-radius: 2px;
   text-align: center;
   margin-right: 10px;
+
+  &.error {
+    border-color: red;
+    color: red;
+  }
+
+  &.edit {
+    animation: pulse 0.3s infinite alternate;
+  }
 }
 
 .modal__action {
