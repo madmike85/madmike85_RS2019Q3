@@ -69,10 +69,19 @@ const PROPERTIES = {
       data: null,
     },
   ],
-  primary: null,
-  secondary: null,
+  tool: 'pencil',
+  primary: '#ffd700',
+  secondary: '#ea2708',
+  isMouseDown: false,
+  lastX: 0,
+  lastY: 0,
   defaulShortcuts: shortcuts,
   currentShortcuts: shortcuts.slice(),
+  canvasSize: 512,
+  pixelSize: 512,
+  pixelSizeMult: 1,
+  canvasHeight: 32,
+  canvasWidth: 32,
 };
 
 export { TAGS, NODES, PROPERTIES };
