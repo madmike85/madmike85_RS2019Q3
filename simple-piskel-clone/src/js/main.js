@@ -2,6 +2,7 @@ import './utils/tooltips';
 import './menu/menu';
 import './main_canvas/canvas';
 import './tools/tools';
+import './color_swap/colorSwap';
 import { TAGS, NODES, PROPERTIES } from './config/config';
 
 // console.log(TAGS);

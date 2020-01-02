@@ -1,7 +1,7 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable comma-dangle */
 import { NODES, PROPERTIES } from '../config/config';
-import { colorsMatch, setPixel, getPixel, hexToRGB } from '../utils/utils';
+// import { colorsMatch, setPixel, getPixel, hexToRGB } from '../utils/utils';
 
 const context = NODES.mainCanvas.getContext('2d');
 context.imageSmoothingEnable = false;
