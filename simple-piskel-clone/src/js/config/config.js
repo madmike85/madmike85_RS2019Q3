@@ -72,6 +72,8 @@ const PROPERTIES = {
   tool: 'pencil',
   primary: '#ffd700',
   secondary: '#ea2708',
+  sampleColor: '',
+  drawingColor: '',
   isMouseDown: false,
   lastX: 0,
   lastY: 0,

@@ -10,8 +10,7 @@ NODES.toolsGrid.addEventListener('click', (e) => {
 
 NODES.sizePanel.addEventListener('click', (e) => {
   if (e.target.classList.contains('size-panel__element')) {
-    PROPERTIES.pixelSizeMult = parseInt(e.target.dataset.size);
-    console.log(PROPERTIES.pixelSizeMult);
+    PROPERTIES.pixelSizeMult = parseInt(e.target.dataset.size, 10);
     NODES.sizeElements.forEach((element) => element.classList.remove('selected'));
     e.target.classList.add('selected');
   }

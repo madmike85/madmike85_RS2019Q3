@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-param-reassign */
 /* eslint-disable prefer-destructuring */
+
 function colorsMatch(a, b, rangeSq) {
   const dr = a[0] - b[0];
   const dg = a[1] - b[1];
@@ -36,4 +37,16 @@ function hexToRGB(hex, alpha) {
   return [r, g, b];
 }
 
-export { colorsMatch, getPixel, setPixel, hexToRGB };
+function rgbToHEX(chanel) {
+  let hex = chanel.toString(16);
+  if (hex.length < 2) {
+    hex = `0${hex}`;
+  }
+  return hex;
+}
+
+function rgbToFullHEX(r, g, b) {
+  return `#${rgbToHEX(r)}${rgbToHEX(g)}${rgbToHEX(b)}`;
+}
+
+export { colorsMatch, getPixel, setPixel, hexToRGB, rgbToFullHEX };
