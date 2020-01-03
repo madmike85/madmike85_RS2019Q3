@@ -1,3 +1,6 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable object-curly-newline */
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-return-assign */
 /* eslint-disable comma-dangle */
 import { NODES, PROPERTIES } from '../config/config';
