@@ -9,6 +9,7 @@ const TAGS = {
   palleteWrapper: '.pallete-wrapper',
   primaryColor: '.primary-color-picker',
   secondaryColor: '.secondary-color-picker',
+  framesRollContainer: '.frames-roll-container',
   frames: '.frame',
   addFrameBtn: '.add-frame-btn',
   cheatsheetBtn: '.cheatsheet-btn',
@@ -40,7 +41,7 @@ const NODES = {
   palletWrapper: document.querySelector(TAGS.palleteWrapper),
   primaryColor: document.querySelector(TAGS.primaryColor),
   secondaryColor: document.querySelector(TAGS.secondaryColor),
-  frames: document.querySelectorAll(TAGS.frames),
+  framesRollContainer: document.querySelector(TAGS.framesRollContainer),
   addFrameBtn: document.querySelector(TAGS.addFrameBtn),
   cheatsheetBtn: document.querySelector(TAGS.cheatsheetBtn),
   mainCanvas: document.querySelector(TAGS.mainCanvas),
@@ -65,8 +66,12 @@ const NODES = {
 const PROPERTIES = {
   frames: [
     {
-      id: 0,
       data: null,
+      context: null,
+    },
+    {
+      data: null,
+      context: null,
     },
   ],
   tool: 'pencil',
