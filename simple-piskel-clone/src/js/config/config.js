@@ -66,14 +66,13 @@ const NODES = {
 const PROPERTIES = {
   frames: [
     {
-      data: null,
       context: null,
-    },
-    {
+      canvas: null,
       data: null,
-      context: null,
+      frameData: null,
     },
   ],
+  currentFrameId: 0,
   tool: 'pencil',
   primary: '#ffd700',
   secondary: '#ea2708',

@@ -49,6 +49,11 @@
   }
 }
 
+.drag-start {
+  opacity: 0;
+  transition: all 0.2s ease-out;
+}
+
 .frame__tile {
   image-rendering: pixelated;
   width: 90px;

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
 /* eslint-disable prefer-destructuring */
@@ -5,6 +6,7 @@
 /* eslint-disable comma-dangle */
 import { NODES, PROPERTIES } from '../config/config';
 import { colorsMatch, setPixel, getPixel, hexToRGB, rgbToFullHEX } from '../utils/utils';
+import { updateFrame } from '../frame_roll/frame_roll';
 
 const context = NODES.mainCanvas.getContext('2d');
 context.imageSmoothingEnable = false;
@@ -120,6 +122,23 @@ function paintAllPixelOfSelectedColor(eventX, eventY, color, range = 1) {
   context.putImageData(canvasData, 0, 0);
 }
 
+function clearCanvas() {
+  context.clearRect(0, 0, NODES.mainCanvas.width, NODES.mainCanvas.height);
+}
+
+function loadDataFromSelectedFrame() {
+  context.putImageData(PROPERTIES.frames[PROPERTIES.currentFrameId].frameData, 0, 0);
+}
+
+function saveCanvasData() {
+  PROPERTIES.frames[PROPERTIES.currentFrameId].frameData = context.getImageData(
+    0,
+    0,
+    NODES.mainCanvas.width,
+    NODES.mainCanvas.height
+  );
+}
+
 NODES.mainCanvas.addEventListener(
   'mousedown',
   (e) => {
@@ -139,6 +158,8 @@ NODES.mainCanvas.addEventListener(
       if (PROPERTIES.isMouseDown) {
         [PROPERTIES.lastX, PROPERTIES.lastY] = [e.layerX, e.layerY];
         draw(PROPERTIES.drawingColor);
+        updateFrame();
+        saveCanvasData();
       }
     }
     if (PROPERTIES.tool === 'eraser') {
@@ -146,6 +167,8 @@ NODES.mainCanvas.addEventListener(
         context.globalCompositeOperation = 'destination-out';
         [PROPERTIES.lastX, PROPERTIES.lastY] = [e.layerX, e.layerY];
         draw('rgba(0,0,0,1)');
+        updateFrame();
+        saveCanvasData();
       }
     }
   },
@@ -158,6 +181,7 @@ NODES.mainCanvas.addEventListener(
       PROPERTIES.isMouseDown = false;
     }
     context.globalCompositeOperation = 'source-over';
+
     e.preventDefault();
   },
   false
@@ -190,5 +214,10 @@ NODES.mainCanvas.addEventListener('click', (e) => {
     const color = hexToRGB(PROPERTIES.primary);
     paintAllPixelOfSelectedColor(e.layerX, e.layerY, color);
   }
+
+  updateFrame();
+  saveCanvasData();
 });
 NODES.mainCanvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+export { clearCanvas, loadDataFromSelectedFrame };
