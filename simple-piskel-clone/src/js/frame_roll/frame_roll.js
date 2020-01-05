@@ -5,41 +5,8 @@ import tippy from 'tippy.js';
 import { PROPERTIES, NODES, TAGS } from '../config/config';
 import { clearCanvas, loadDataFromSelectedFrame } from '../main_canvas/canvas';
 
-// test start
 let framesList;
 let source;
-function dragStarted(evt) {
-  source = evt.target;
-  evt.dataTransfer.setData('text/plain', evt.target.dataset.id);
-  evt.dataTransfer.effectAllowed = 'move';
-  source.classList.add('drag-start');
-}
-
-function draggingOver(evt) {
-  evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'move';
-}
-
-function draggingLeave(evt) {
-  evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'move';
-}
-
-function dropped(evt) {
-  evt.preventDefault();
-  evt.stopPropagation();
-
-  const sid = evt.dataTransfer.getData('text/plain');
-  const tid = evt.target.parentNode.dataset.id;
-
-  [PROPERTIES.frames[sid], PROPERTIES.frames[tid]] = [
-    PROPERTIES.frames[tid],
-    PROPERTIES.frames[sid],
-  ];
-
-  framesList.forEach((item) => item.classList.remove('drag-start'));
-  generateFrameRoll();
-}
 
 // test end
 
@@ -166,6 +133,39 @@ function updateFrame() {
   PROPERTIES.frames[PROPERTIES.currentFrameId].data = PROPERTIES.frames[
     PROPERTIES.currentFrameId
   ].context.getImageData(0, 0, selectedWidth, selectedHeight);
+}
+
+function dragStarted(evt) {
+  source = evt.target;
+  evt.dataTransfer.setData('text/plain', evt.target.dataset.id);
+  evt.dataTransfer.effectAllowed = 'move';
+  source.classList.add('drag-start');
+}
+
+function draggingOver(evt) {
+  evt.preventDefault();
+  evt.dataTransfer.dropEffect = 'move';
+}
+
+function draggingLeave(evt) {
+  evt.preventDefault();
+  evt.dataTransfer.dropEffect = 'move';
+}
+
+function dropped(evt) {
+  evt.preventDefault();
+  evt.stopPropagation();
+
+  const sid = evt.dataTransfer.getData('text/plain');
+  const tid = evt.target.parentNode.dataset.id;
+
+  [PROPERTIES.frames[sid], PROPERTIES.frames[tid]] = [
+    PROPERTIES.frames[tid],
+    PROPERTIES.frames[sid],
+  ];
+
+  framesList.forEach((item) => item.classList.remove('drag-start'));
+  generateFrameRoll();
 }
 
 NODES.addFrameBtn.addEventListener('click', () => {

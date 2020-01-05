@@ -81,6 +81,7 @@ const PROPERTIES = {
   isMouseDown: false,
   lastX: 0,
   lastY: 0,
+  fps: 24,
   defaulShortcuts: shortcuts,
   currentShortcuts: shortcuts.slice(),
   canvasSize: 512,

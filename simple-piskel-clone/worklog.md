@@ -5,3 +5,5 @@
 | January 2   | January 2   | 30min      | Color swap                        |
 | January 3   | January 3   | 4h         | Bucket tool and Magic Bucket tool |
 | January 3   | January 3   | 1h         | Canvas resizing tools             |
+| January 4   | January 4   | 8h         | Frames                            |
+| January 5   | January 5   | 1h         | Animation                         |
