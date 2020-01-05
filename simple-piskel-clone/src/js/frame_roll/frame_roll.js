@@ -1,3 +1,6 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-use-before-define */
+/* eslint-disable comma-dangle */
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-cycle */
 /* eslint-disable indent */

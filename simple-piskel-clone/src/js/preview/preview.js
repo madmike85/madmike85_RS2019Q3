@@ -1,3 +1,5 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable comma-dangle */
 import { NODES, PROPERTIES } from '../config/config';
 
 const context = NODES.previewCanvas.getContext('2d');
@@ -21,4 +23,68 @@ function drawFrame() {
   }, 1000 / PROPERTIES.fps);
 }
 
+function fullscreenPreview() {
+  if (
+    'fullscreenEnabled' in document ||
+    'webkitFullscreenEnabled' in document ||
+    'mozFullScreenEnabled' in document
+  ) {
+    if (
+      document.fullscreenEnabled ||
+      document.webkitFullscreenEnabled ||
+      document.mozFullScreenEnabled
+    ) {
+      const element = NODES.previewCanvas;
+      if ('requestFullscreen' in element) {
+        element.requestFullscreen();
+      } else if ('webkitRequestFullscreen' in element) {
+        element.webkitRequestFullscreen();
+      } else if ('mozRequestFullScreen' in element) {
+        element.mozRequestFullScreen();
+      }
+    }
+  } else {
+    console.log("User doesn't allow full screen");
+  }
+}
+
+function fullscreenChange() {
+  if (
+    document.fullscreenElement ||
+    document.webkitFullscreenElement ||
+    document.mozFullScreenElement
+  ) {
+    console.log(
+      `Current full screen element is : 
+        ${document.fullscreenElement ||
+          document.webkitFullscreenElement ||
+          document.mozFullScreenElement}`
+    );
+  } else if ('exitFullscreen' in document) {
+    document.exitFullscreen();
+  } else if ('webkitExitFullscreen' in document) {
+    document.webkitExitFullscreen();
+  } else if ('mozCancelFullScreen' in document) {
+    document.mozCancelFullScreen();
+  }
+}
+
 requestAnimationFrame(drawFrame);
+
+document.addEventListener('fullscreenchange', fullscreenChange);
+document.addEventListener('webkitfullscreenchange', fullscreenChange);
+document.addEventListener('mozfullscreenchange', fullscreenChange);
+
+document.addEventListener('fullscreenerror', () => {
+  console.log('Full screen failed');
+});
+document.addEventListener('webkitfullscreenerror', () => {
+  console.log('Full screen failed');
+});
+document.addEventListener('mozfullscreenerror', () => {
+  console.log('Full screen failed');
+});
+
+NODES.fullscreenBtn.addEventListener('click', () => {
+  fullscreenPreview();
+});

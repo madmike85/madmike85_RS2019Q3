@@ -1,3 +1,6 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-bitwise */
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-cycle */
 /* eslint-disable operator-linebreak */
 /* eslint-disable object-curly-newline */
@@ -5,7 +8,14 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable comma-dangle */
 import { NODES, PROPERTIES } from '../config/config';
-import { colorsMatch, setPixel, getPixel, hexToRGB, rgbToFullHEX } from '../utils/utils';
+import {
+  colorsMatch,
+  setPixel,
+  getPixel,
+  hexToRGB,
+  rgbToFullHEX,
+  getAdjustedCoordinates,
+} from '../utils/utils';
 import { updateFrame } from '../frame_roll/frame_roll';
 
 const context = NODES.mainCanvas.getContext('2d');
@@ -17,7 +27,6 @@ NODES.mainCanvas.width = PROPERTIES.canvasWidth;
 NODES.mainCanvas.height = PROPERTIES.canvasHeight;
 
 function draw(color) {
-  // TODO: Refactor caclculation x and y by moving it to separate function
   const calcPixelSize = Math.ceil(
     PROPERTIES.canvasSize / (PROPERTIES.pixelSize / PROPERTIES.pixelSizeMult)
   );
@@ -38,16 +47,67 @@ function draw(color) {
   context.fillRect(x, y, calcPixelSize, calcPixelSize);
 }
 
-function getColor(eventX, eventY) {
-  // TODO: Refactor caclculation x and y by moving it to separate function
-  const calcPixelSize = Math.ceil(
-    PROPERTIES.canvasSize / (PROPERTIES.pixelSize / PROPERTIES.pixelSizeMult)
-  );
-  const fixedX = eventX / (PROPERTIES.canvasSize / NODES.mainCanvas.width);
-  const fixedY = eventY / (PROPERTIES.canvasSize / NODES.mainCanvas.height);
+function drawLine(ctx, x1, y1, x2, y2) {
+  x1 = Math.round(x1);
+  y1 = Math.round(y1);
+  x2 = Math.round(x2);
+  y2 = Math.round(y2);
+  const dx = Math.abs(x2 - x1);
+  const sx = x1 < x2 ? 1 : -1;
+  const dy = Math.abs(y2 - y1);
+  const sy = y1 < y2 ? 1 : -1;
+  let error;
+  let len;
+  let rev;
+  let count = dx;
+  ctx.beginPath();
+  if (dx > dy) {
+    error = dx / 2;
+    rev = x1 > x2 ? 1 : 0;
+    if (dy > 1) {
+      error = 0;
+      count = dy - 1;
+      do {
+        len = (error / dy + 2) | 0;
+        ctx.rect(x1 - len * rev, y1, len, 1 * PROPERTIES.pixelSizeMult);
+        x1 += len * sx;
+        y1 += sy;
+        error -= len * dy - dx;
+      } while (count--);
+    }
+    if (error > 0) {
+      ctx.rect(x1, y2, x2 - x1, 1 * PROPERTIES.pixelSizeMult);
+    }
+  } else if (dx < dy) {
+    error = dy / 2;
+    rev = y1 > y2 ? 1 : 0;
+    if (dx > 1) {
+      error = 0;
+      count--;
+      do {
+        len = (error / dx + 2) | 0;
+        ctx.rect(x1, y1 - len * rev, 1 * PROPERTIES.pixelSizeMult, len);
+        y1 += len * sy;
+        x1 += sx;
+        error -= len * dx - dy;
+      } while (count--);
+    }
+    if (error > 0) {
+      ctx.rect(x2, y1, 1 * PROPERTIES.pixelSizeMult, y2 - y1);
+    }
+  } else {
+    do {
+      ctx.rect(x1, y1, 1 * PROPERTIES.pixelSizeMult, 1 * PROPERTIES.pixelSizeMult);
+      x1 += sx;
+      y1 += sy;
+    } while (count--);
+  }
+  ctx.fillStyle = PROPERTIES.primary;
+  ctx.fill();
+}
 
-  const x = Math.ceil(fixedX / calcPixelSize) * calcPixelSize - calcPixelSize;
-  const y = Math.ceil(fixedY / calcPixelSize) * calcPixelSize - calcPixelSize;
+function getColor(eventX, eventY) {
+  const [x, y] = getAdjustedCoordinates(eventX, eventY);
   PROPERTIES.sampleColor = rgbToFullHEX(...context.getImageData(x, y, 1, 1).data);
 }
 
@@ -58,15 +118,7 @@ function setColor() {
 }
 
 function floodFill(ctx, eventX, eventY, fillColor, range = 1) {
-  // TODO: Refactor caclculation x and y by moving it to separate function
-  const calcPixelSize = Math.ceil(
-    PROPERTIES.canvasSize / (PROPERTIES.pixelSize / PROPERTIES.pixelSizeMult)
-  );
-  const fixedX = eventX / (PROPERTIES.canvasSize / NODES.mainCanvas.width);
-  const fixedY = eventY / (PROPERTIES.canvasSize / NODES.mainCanvas.height);
-
-  let x = Math.ceil(fixedX / calcPixelSize) * calcPixelSize - calcPixelSize;
-  let y = Math.ceil(fixedY / calcPixelSize) * calcPixelSize - calcPixelSize;
+  let [x, y] = getAdjustedCoordinates(eventX, eventY);
   const imageData = ctx.getImageData(0, 0, NODES.mainCanvas.width, NODES.mainCanvas.height);
   const visited = new Uint8Array(imageData.width, imageData.height);
   const targetColor = getPixel(imageData, x, y);
@@ -96,15 +148,7 @@ function floodFill(ctx, eventX, eventY, fillColor, range = 1) {
 }
 
 function paintAllPixelOfSelectedColor(eventX, eventY, color, range = 1) {
-  // TODO: Refactor caclculation x and y by moving it to separate function
-  const calcPixelSize = Math.ceil(
-    PROPERTIES.canvasSize / (PROPERTIES.pixelSize / PROPERTIES.pixelSizeMult)
-  );
-  const fixedX = eventX / (PROPERTIES.canvasSize / NODES.mainCanvas.width);
-  const fixedY = eventY / (PROPERTIES.canvasSize / NODES.mainCanvas.height);
-
-  const x = Math.ceil(fixedX / calcPixelSize) * calcPixelSize - calcPixelSize;
-  const y = Math.ceil(fixedY / calcPixelSize) * calcPixelSize - calcPixelSize;
+  const [x, y] = getAdjustedCoordinates(eventX, eventY);
 
   const colorToPaint = context.getImageData(x, y, 1, 1).data;
 
@@ -146,6 +190,11 @@ NODES.mainCanvas.addEventListener(
     if (PROPERTIES.tool === 'pencil') {
       PROPERTIES.drawingColor = e.which === 1 ? PROPERTIES.primary : PROPERTIES.secondary;
     }
+    if (PROPERTIES.tool === 'line') {
+      const [x, y] = getAdjustedCoordinates(e.layerX, e.layerY);
+      [PROPERTIES.startLineX, PROPERTIES.startLineY] = [x, y];
+      PROPERTIES.lineStarted = true;
+    }
 
     e.preventDefault();
   },
@@ -179,6 +228,10 @@ NODES.mainCanvas.addEventListener(
   (e) => {
     if (PROPERTIES.tool === 'pencil') {
       PROPERTIES.isMouseDown = false;
+    }
+    if (PROPERTIES.tool === 'line') {
+      const [x, y] = getAdjustedCoordinates(e.layerX, e.layerY);
+      drawLine(context, PROPERTIES.startLineX, PROPERTIES.startLineY, x, y);
     }
     context.globalCompositeOperation = 'source-over';
 

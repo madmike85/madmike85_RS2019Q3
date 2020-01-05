@@ -1,6 +1,9 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable object-curly-newline */
 /* eslint-disable no-param-reassign */
 /* eslint-disable prefer-destructuring */
+
+import { NODES, PROPERTIES } from '../config/config';
 
 function colorsMatch(a, b, rangeSq) {
   const dr = a[0] - b[0];
@@ -49,4 +52,17 @@ function rgbToFullHEX(r, g, b) {
   return `#${rgbToHEX(r)}${rgbToHEX(g)}${rgbToHEX(b)}`;
 }
 
-export { colorsMatch, getPixel, setPixel, hexToRGB, rgbToFullHEX };
+function getAdjustedCoordinates(eventX, eventY) {
+  const calcPixelSize = Math.ceil(
+    PROPERTIES.canvasSize / (PROPERTIES.pixelSize / PROPERTIES.pixelSizeMult)
+  );
+  const fixedX = eventX / (PROPERTIES.canvasSize / NODES.mainCanvas.width);
+  const fixedY = eventY / (PROPERTIES.canvasSize / NODES.mainCanvas.height);
+
+  const x = Math.ceil(fixedX / calcPixelSize) * calcPixelSize - calcPixelSize;
+  const y = Math.ceil(fixedY / calcPixelSize) * calcPixelSize - calcPixelSize;
+
+  return [x, y];
+}
+
+export { colorsMatch, getPixel, setPixel, hexToRGB, rgbToFullHEX, getAdjustedCoordinates };

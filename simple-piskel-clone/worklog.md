@@ -7,3 +7,5 @@
 | January 3   | January 3   | 1h         | Canvas resizing tools             |
 | January 4   | January 4   | 8h         | Frames                            |
 | January 5   | January 5   | 1h         | Animation                         |
+| January 5   | January 5   | 40min      | Fullscreen preview                |
+| January 5   | January 5   | 2h         | Line tool                         |
