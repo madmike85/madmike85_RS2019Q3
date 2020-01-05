@@ -92,14 +92,14 @@ tippy('.resize-btn', {
 });
 
 tippy('.save-btn', {
-  content: '<p>Save into file <span class="hotkey">(F)</span></p>',
+  content: '<p>Save into file <span class="hotkey">(S)</span></p>',
   placement: 'left',
   arrow: true,
   theme: 'black',
 });
 
 tippy('.cheatsheet-btn', {
-  content: '<p>Keyboard shortcuts <span class="hotkey">(A)</span></p>',
+  content: 'Keyboard shortcuts',
   placement: 'right',
   arrow: true,
   theme: 'black',

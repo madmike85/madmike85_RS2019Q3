@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { NODES, PROPERTIES } from '../config/config';
 
 function swapColors() {
@@ -5,7 +6,8 @@ function swapColors() {
   NODES.primaryColor.setAttribute('value', PROPERTIES.primary);
   NODES.secondaryColor.setAttribute('value', PROPERTIES.secondary);
   NODES.palletWrapper.querySelector('.primary-color').style.backgroundColor = PROPERTIES.primary;
-  NODES.palletWrapper.querySelector('.secondary-color').style.backgroundColor = PROPERTIES.secondary;
+  NODES.palletWrapper.querySelector('.secondary-color').style.backgroundColor =
+    PROPERTIES.secondary;
 }
 
 NODES.palletWrapper.addEventListener('click', (e) => {
@@ -13,3 +15,5 @@ NODES.palletWrapper.addEventListener('click', (e) => {
     swapColors();
   }
 });
+
+export { swapColors };

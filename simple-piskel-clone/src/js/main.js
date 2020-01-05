@@ -6,7 +6,8 @@ import './color_swap/colorSwap';
 import './frame_roll/frame_roll';
 import './fps_slider/fps_slider';
 import './preview/preview';
-import { TAGS, NODES, PROPERTIES } from './config/config';
+import './utils/keypress_handler';
+import { NODES } from './config/config';
 
 // console.log(TAGS);
 // console.log(NODES);

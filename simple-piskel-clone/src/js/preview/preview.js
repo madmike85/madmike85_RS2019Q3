@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable operator-linebreak */
 /* eslint-disable comma-dangle */
 import { NODES, PROPERTIES } from '../config/config';
@@ -88,3 +90,5 @@ document.addEventListener('mozfullscreenerror', () => {
 NODES.fullscreenBtn.addEventListener('click', () => {
   fullscreenPreview();
 });
+
+export { fullscreenPreview };

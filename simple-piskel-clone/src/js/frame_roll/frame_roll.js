@@ -11,8 +11,6 @@ import { clearCanvas, loadDataFromSelectedFrame } from '../main_canvas/canvas';
 let framesList;
 let source;
 
-// test end
-
 function getFramesCanvasContext() {
   const frames = document.querySelectorAll('.frame__tile');
   frames.forEach((frame, i) => {
@@ -92,6 +90,7 @@ function addFrame() {
     context: null,
     canvas: null,
     data: null,
+    frameData: null,
   });
   PROPERTIES.currentFrameId = PROPERTIES.frames.length - 1;
   clearCanvas();
@@ -104,9 +103,14 @@ function deleteFrame(id) {
 }
 
 function copyFrame(id) {
-  const frame = PROPERTIES.frames[id];
-
-  PROPERTIES.frames.splice(id, 0, frame);
+  const frameToCopy = PROPERTIES.frames[id];
+  const frame = {
+    context: null,
+    canvas: null,
+    data: frameToCopy.data,
+    frameData: frameToCopy.frameData,
+  };
+  PROPERTIES.frames.splice(id + 1, 0, frame);
   generateFrameRoll();
 }
 
@@ -190,8 +194,8 @@ NODES.framesRollContainer.addEventListener('click', (e) => {
     deleteFrame(id);
   }
   if (e.target.classList.contains('frame__copy-btn')) {
-    const { id } = e.target.parentNode.parentNode.dataset.id;
-    copyFrame(id);
+    const idx = e.target.parentNode.parentNode.dataset.id;
+    copyFrame(idx);
   }
 });
 
@@ -199,4 +203,4 @@ window.addEventListener('load', () => {
   generateFrameRoll();
 });
 
-export { updateFrame };
+export { updateFrame, addFrame, deleteFrame, copyFrame };
