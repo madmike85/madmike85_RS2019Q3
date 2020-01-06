@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable import/prefer-default-export */
 import { NODES, PROPERTIES } from '../config/config';
 
@@ -14,6 +15,16 @@ NODES.palletWrapper.addEventListener('click', (e) => {
   if (e.target.classList.contains('color-switch-btn')) {
     swapColors();
   }
+});
+
+NODES.primaryColor.addEventListener('input', () => {
+  PROPERTIES.primary = NODES.primaryColor.value;
+  NODES.palletWrapper.querySelector('.primary-color').style.backgroundColor = PROPERTIES.primary;
+});
+
+NODES.secondaryColor.addEventListener('input', () => {
+  PROPERTIES.secondary = NODES.secondaryColor.value;
+  NODES.palletWrapper.querySelector('.primary-color').style.backgroundColor = PROPERTIES.secondary;
 });
 
 export { swapColors };

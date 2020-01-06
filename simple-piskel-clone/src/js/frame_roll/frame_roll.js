@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-use-before-define */
 /* eslint-disable comma-dangle */
@@ -95,6 +96,7 @@ function addFrame() {
   PROPERTIES.currentFrameId = PROPERTIES.frames.length - 1;
   clearCanvas();
   generateFrameRoll();
+  console.log(PROPERTIES.frames);
 }
 
 function deleteFrame(id) {
@@ -199,8 +201,4 @@ NODES.framesRollContainer.addEventListener('click', (e) => {
   }
 });
 
-window.addEventListener('load', () => {
-  generateFrameRoll();
-});
-
-export { updateFrame, addFrame, deleteFrame, copyFrame };
+export { updateFrame, addFrame, deleteFrame, copyFrame, generateFrameRoll };

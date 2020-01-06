@@ -7,7 +7,9 @@ import './frame_roll/frame_roll';
 import './fps_slider/fps_slider';
 import './preview/preview';
 import './utils/keypress_handler';
+import './modal/modal';
 import { NODES } from './config/config';
+import { saveSession, loadSession } from './utils/session';
 
 // console.log(TAGS);
 // console.log(NODES);
@@ -19,3 +21,8 @@ NODES.modal.addEventListener('click', (e) => {
     NODES.modal.classList.remove('open');
   }
 });
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadSession();
+});
+window.addEventListener('beforeunload', saveSession);

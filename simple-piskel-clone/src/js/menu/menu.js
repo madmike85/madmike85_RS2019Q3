@@ -1,5 +1,6 @@
 /* eslint-disable operator-linebreak */
 import { NODES, PROPERTIES } from '../config/config';
+import { saveIntoFile } from './save_animation';
 
 const context = NODES.mainCanvas.getContext('2d');
 
@@ -52,6 +53,12 @@ NODES.menu.addEventListener('click', (e) => {
       PROPERTIES.canvasWidth = NODES.widthInput.value;
       PROPERTIES.canvasHeight = NODES.heightInput.value;
       resize();
+    }
+  }
+
+  if (e.target.classList.contains('apng-save__btn')) {
+    if (NODES.saveInput.value.length > 0) {
+      saveIntoFile(NODES.saveInput.value);
     }
   }
 });
