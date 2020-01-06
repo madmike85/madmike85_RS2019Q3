@@ -10,3 +10,4 @@
 | January 5   | January 5   | 40min      | Fullscreen preview                |
 | January 5   | January 5   | 2h         | Line tool                         |
 | January 5   | January 5   | 1h         | Shortcuts                         |
+| January 6   | January 6   | 1h         | JEST setup                        |
