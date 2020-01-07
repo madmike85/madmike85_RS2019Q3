@@ -26,14 +26,12 @@ function changeKeyBinding(key) {
 
 function resetToDefaults() {
   PROPERTIES.currentShortcuts = _.cloneDeep(PROPERTIES.defaulShortcuts);
-  console.log(PROPERTIES.currentShortcuts, PROPERTIES.defaulShortcuts);
   const keyElements = document.querySelectorAll('[data-key]');
   keyElements.forEach((element) => {
     const defaultShortcut = PROPERTIES.currentShortcuts.find(
       (x) => x.element === element.dataset.key
     );
     element.innerText = defaultShortcut.key.toString().slice(-1);
-  });
 }
 
 NODES.modal.addEventListener('click', (e) => {

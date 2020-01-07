@@ -3,6 +3,17 @@ import { NODES, PROPERTIES } from '../config/config';
 
 const context = NODES.mainCanvas.getContext('2d');
 
+const UPNG = require('upng-js');
+const download = require('downloadjs');
+
+function saveAsAPNG(name) {
+  const delays = new Array(PROPERTIES.frames.length).fill(500);
+  const framesData = PROPERTIES.frames.map((x) => x.frameData.data.buffer);
+  console.log(framesData);
+  const result = UPNG.encode(framesData, 32, 32, 0, delays);
+  download(result, `${name}.apng`, 'apng');
+}
+
 function resize() {
   const canvasData = context.getImageData(0, 0, NODES.mainCanvas.width, NODES.mainCanvas.height);
   NODES.mainCanvas.width = PROPERTIES.canvasWidth;
@@ -55,6 +66,11 @@ NODES.menu.addEventListener('click', (e) => {
       PROPERTIES.canvasHeight = NODES.heightInput.value;
       resize();
     }
+  }
+
+  if (e.target.classList.contains('apng-save__btn')) {
+    const name = NODES.saveInput.value;
+    saveAsAPNG(name);
   }
 });
 
