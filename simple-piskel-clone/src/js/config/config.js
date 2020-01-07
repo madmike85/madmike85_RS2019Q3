@@ -1,5 +1,7 @@
 import { shortcuts } from '../utils/shortcuts';
 
+const _ = require('lodash');
+
 const TAGS = {
   createSpriteBtn: '.btn-create-sprite',
   sizePanel: '.sizes-panel',
@@ -96,7 +98,7 @@ const PROPERTIES = {
   endLineY: 0,
   fps: 24,
   defaulShortcuts: shortcuts,
-  currentShortcuts: localStorage.getItem('shortcuts') || shortcuts.slice(),
+  currentShortcuts: _.cloneDeep(shortcuts),
   canvasSize: 512,
   pixelSize: 512,
   pixelSizeMult: 1,

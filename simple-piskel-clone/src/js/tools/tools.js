@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { NODES, PROPERTIES } from '../config/config';
 
 function updateCursor() {
@@ -39,3 +40,5 @@ NODES.sizePanel.addEventListener('click', (e) => {
     e.target.classList.add('selected');
   }
 });
+
+export { updateCursor };

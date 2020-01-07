@@ -96,7 +96,6 @@ function addFrame() {
   PROPERTIES.currentFrameId = PROPERTIES.frames.length - 1;
   clearCanvas();
   generateFrameRoll();
-  console.log(PROPERTIES.frames);
 }
 
 function deleteFrame(id) {

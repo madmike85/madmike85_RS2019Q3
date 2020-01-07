@@ -1,5 +1,8 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable comma-dangle */
 import { NODES, PROPERTIES } from '../config/config';
+
+const _ = require('lodash');
 
 function changeKeyBinding(key) {
   const idx = PROPERTIES.currentShortcuts.findIndex(
@@ -21,6 +24,18 @@ function changeKeyBinding(key) {
   PROPERTIES.selectedKeyBind = null;
 }
 
+function resetToDefaults() {
+  PROPERTIES.currentShortcuts = _.cloneDeep(PROPERTIES.defaulShortcuts);
+  console.log(PROPERTIES.currentShortcuts, PROPERTIES.defaulShortcuts);
+  const keyElements = document.querySelectorAll('[data-key]');
+  keyElements.forEach((element) => {
+    const defaultShortcut = PROPERTIES.currentShortcuts.find(
+      (x) => x.element === element.dataset.key
+    );
+    element.innerText = defaultShortcut.key.toString().slice(-1);
+  });
+}
+
 NODES.modal.addEventListener('click', (e) => {
   if (e.target.classList.contains('shortcut-value')) {
     NODES.shortcutValues.forEach((item) => {
@@ -32,6 +47,10 @@ NODES.modal.addEventListener('click', (e) => {
     PROPERTIES.selectedKeyBind = e.target;
     PROPERTIES.isKeyEdit = !PROPERTIES.isKeyEdit;
   }
+});
+
+NODES.restoreDefault.addEventListener('click', () => {
+  resetToDefaults();
 });
 
 window.addEventListener('keypress', (e) => {

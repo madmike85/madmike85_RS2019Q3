@@ -5,17 +5,17 @@
 import { NODES, PROPERTIES } from '../config/config';
 
 const context = NODES.previewCanvas.getContext('2d');
-NODES.previewCanvas.width = 100;
-NODES.previewCanvas.height = 100;
+NODES.previewCanvas.width = PROPERTIES.canvasWidth;
+NODES.previewCanvas.height = PROPERTIES.canvasHeight;
 let frameIdx = 0;
 
 function drawFrame() {
   if (PROPERTIES.fps === 0) {
-    context.putImageData(PROPERTIES.frames[0].frameData, 35, 35);
+    context.putImageData(PROPERTIES.frames[0].frameData, 0, 0);
   }
   setTimeout(() => {
     if (PROPERTIES.frames[frameIdx] && PROPERTIES.frames[frameIdx].frameData) {
-      context.putImageData(PROPERTIES.frames[frameIdx].frameData, 35, 35);
+      context.putImageData(PROPERTIES.frames[frameIdx].frameData, 0, 0);
     }
     frameIdx += 1;
     if (frameIdx >= PROPERTIES.frames.length) {

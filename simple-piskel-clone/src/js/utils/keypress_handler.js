@@ -2,6 +2,7 @@ import { NODES, PROPERTIES } from '../config/config';
 import { addFrame, deleteFrame, copyFrame } from '../frame_roll/frame_roll';
 import { swapColors } from '../color_swap/colorSwap';
 import { fullscreenPreview } from '../preview/preview';
+import { updateCursor } from '../tools/tools';
 
 window.addEventListener('keypress', (e) => {
   const shortcut = PROPERTIES.currentShortcuts.find((x) => x.key === e.code) || null;
@@ -74,4 +75,5 @@ window.addEventListener('keypress', (e) => {
       fullscreenPreview();
     }
   }
+  updateCursor();
 });

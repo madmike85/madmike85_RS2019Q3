@@ -1,5 +1,7 @@
 import { PROPERTIES, NODES } from '../config/config';
 import { generateFrameRoll } from '../frame_roll/frame_roll';
+import { updateCursor } from '../tools/tools';
+import { updateColors } from '../color_swap/colorSwap';
 
 function saveSession() {
   localStorage.setItem('currentFrameId', PROPERTIES.currentFrameId);
@@ -41,8 +43,9 @@ function loadSession() {
 
   NODES.mainCanvas.width = PROPERTIES.canvasWidth;
   NODES.mainCanvas.height = PROPERTIES.canvasHeight;
-  console.log(PROPERTIES);
   generateFrameRoll();
+  updateCursor();
+  updateColors();
 }
 
 export { saveSession, loadSession };

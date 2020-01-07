@@ -1,6 +1,5 @@
 /* eslint-disable operator-linebreak */
 import { NODES, PROPERTIES } from '../config/config';
-import { saveIntoFile } from './save_animation';
 
 const context = NODES.mainCanvas.getContext('2d');
 
@@ -8,6 +7,8 @@ function resize() {
   const canvasData = context.getImageData(0, 0, NODES.mainCanvas.width, NODES.mainCanvas.height);
   NODES.mainCanvas.width = PROPERTIES.canvasWidth;
   NODES.mainCanvas.height = PROPERTIES.canvasHeight;
+  NODES.previewCanvas.width = PROPERTIES.canvasWidth;
+  NODES.previewCanvas.height = PROPERTIES.canvasHeight;
   context.putImageData(canvasData, 0, 0);
 }
 
@@ -53,12 +54,6 @@ NODES.menu.addEventListener('click', (e) => {
       PROPERTIES.canvasWidth = NODES.widthInput.value;
       PROPERTIES.canvasHeight = NODES.heightInput.value;
       resize();
-    }
-  }
-
-  if (e.target.classList.contains('apng-save__btn')) {
-    if (NODES.saveInput.value.length > 0) {
-      saveIntoFile(NODES.saveInput.value);
     }
   }
 });
