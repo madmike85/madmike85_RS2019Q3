@@ -32,6 +32,7 @@ function resetToDefaults() {
       (x) => x.element === element.dataset.key
     );
     element.innerText = defaultShortcut.key.toString().slice(-1);
+  });
 }
 
 NODES.modal.addEventListener('click', (e) => {
