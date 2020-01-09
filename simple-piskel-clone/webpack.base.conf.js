@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -17,7 +18,7 @@ module.exports = {
     app: PATHS.src,
   },
   output: {
-    filename: `js/[name].js`,
+    filename: 'js/[name].js',
     path: PATHS.dist,
     publicPath: '/',
   },
@@ -89,6 +90,10 @@ module.exports = {
       {
         from: `${PATHS.src}/assets/img`,
         to: `${PATHS.assets}img`,
+      },
+      {
+        from: './src/js/utils/gif.worker.js',
+        to: './js/',
       },
     ]),
   ],

@@ -1,6 +1,6 @@
 /* eslint-disable operator-linebreak */
 import { NODES, PROPERTIES } from '../config/config';
-import { saveAsAPNG } from './saving_into_file';
+import { saveAsAPNG, saveAsGIF } from './saving_into_file';
 
 const context = NODES.mainCanvas.getContext('2d');
 
@@ -61,6 +61,12 @@ NODES.menu.addEventListener('click', (e) => {
   if (e.target.classList.contains('apng-save__btn')) {
     const name = NODES.saveInput.value;
     saveAsAPNG(name);
+  }
+
+  if (e.target.classList.contains('gif-save__btn')) {
+    console.log('fire');
+    const name = NODES.saveInput.value;
+    saveAsGIF(name);
   }
 });
 
