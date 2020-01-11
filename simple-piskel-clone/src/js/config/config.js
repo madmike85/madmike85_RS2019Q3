@@ -89,6 +89,7 @@ const PROPERTIES = {
   isMouseDown: false,
   lineStarted: false,
   isKeyEdit: false,
+  isMenuShown: false,
   selectedKeyBind: null,
   lastX: 0,
   lastY: 0,

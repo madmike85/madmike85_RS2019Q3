@@ -16,10 +16,12 @@ function resize() {
 NODES.menuBtnHolder.addEventListener('click', (e) => {
   if (e.target.classList.contains('menu-btn') && !e.target.classList.contains('selected')) {
     NODES.menu.classList.add('menu-shown');
+    PROPERTIES.isMenuShown = true;
     NODES.menuBtns.forEach((button) => button.classList.remove('selected'));
     e.target.classList.add('selected');
   } else if (e.target.classList.contains('selected')) {
     NODES.menu.classList.remove('menu-shown');
+    PROPERTIES.isMenuShown = false;
     NODES.menuBtns.forEach((button) => button.classList.remove('selected'));
   }
 

@@ -5,6 +5,7 @@ import { fullscreenPreview } from '../preview/preview';
 import { updateCursor } from '../tools/tools';
 
 window.addEventListener('keypress', (e) => {
+  if (PROPERTIES.isMenuShown) return;
   const shortcut = PROPERTIES.currentShortcuts.find((x) => x.key === e.code) || null;
   if (!shortcut) return;
 

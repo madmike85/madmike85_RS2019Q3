@@ -11,3 +11,4 @@
 | January 5   | January 5   | 2h         | Line tool                         |
 | January 5   | January 5   | 1h         | Shortcuts                         |
 | January 6   | January 6   | 1h         | JEST setup                        |
+| January 8   | January 9   | 3h         | Saving to .apng and .gif          |
