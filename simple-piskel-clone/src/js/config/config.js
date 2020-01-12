@@ -3,6 +3,8 @@ import { shortcuts } from '../utils/shortcuts';
 const _ = require('lodash');
 
 const TAGS = {
+  landing: '.landing-container',
+  editor: '.editor-container',
   createSpriteBtn: '.btn-create-sprite',
   sizePanel: '.sizes-panel',
   sizeElements: '.size-panel__element',
@@ -38,7 +40,9 @@ const TAGS = {
 };
 
 const NODES = {
-  createSpriteBtn: document.querySelector(TAGS.createSpriteBtn),
+  landing: document.querySelector(TAGS.landing),
+  editor: document.querySelector(TAGS.editor),
+  createSpriteBtn: document.querySelectorAll(TAGS.createSpriteBtn),
   sizePanel: document.querySelector(TAGS.sizePanel),
   sizeElements: document.querySelectorAll(TAGS.sizeElements),
   toolsGrid: document.querySelector(TAGS.toolsGrid),

@@ -6,6 +6,7 @@
 @import 'utils/utils';
 @import 'modal/modal';
 @import 'menu/menu';
+@import 'landing/landing';
 
 * {
   margin: 0;
@@ -21,7 +22,20 @@ body {
 
 .editor-container {
   height: 94vh;
-  display: flex;
+
+  display: none;
+
+  &.shown {
+    display: flex;
+  }
+}
+
+.landing-container {
+  display: none;
+
+  &.shown {
+    display: block;
+  }
 }
 
 .left-side-tools {

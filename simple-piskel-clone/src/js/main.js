@@ -8,8 +8,9 @@ import './fps_slider/fps_slider';
 import './preview/preview';
 import './utils/keypress_handler';
 import './modal/modal';
+import './landing/landing';
 import { NODES } from './config/config';
-import { saveSession, loadSession } from './utils/session';
+import { saveSession } from './utils/session';
 
 // console.log(TAGS);
 // console.log(NODES);
@@ -22,7 +23,4 @@ NODES.modal.addEventListener('click', (e) => {
   }
 });
 
-window.addEventListener('DOMContentLoaded', () => {
-  loadSession();
-});
 window.addEventListener('beforeunload', saveSession);
