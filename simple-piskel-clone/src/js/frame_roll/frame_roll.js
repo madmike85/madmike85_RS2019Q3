@@ -125,7 +125,7 @@ function updateFrame() {
     0,
     0,
     selectedWidth,
-    selectedHeight
+    selectedHeight,
   );
   PROPERTIES.frames[PROPERTIES.currentFrameId].context.drawImage(
     canvasImage,
@@ -136,7 +136,7 @@ function updateFrame() {
     0,
     0,
     selectedWidth,
-    selectedHeight
+    selectedHeight,
   );
   PROPERTIES.frames[PROPERTIES.currentFrameId].data = PROPERTIES.frames[
     PROPERTIES.currentFrameId
@@ -200,4 +200,4 @@ NODES.framesRollContainer.addEventListener('click', (e) => {
   }
 });
 
-export { updateFrame, addFrame, deleteFrame, copyFrame, generateFrameRoll };
+export { updateFrame, addFrame, deleteFrame, copyFrame, generateFrameRoll, getFramesCanvasContext };

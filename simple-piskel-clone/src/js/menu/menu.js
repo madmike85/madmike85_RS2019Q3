@@ -66,7 +66,6 @@ NODES.menu.addEventListener('click', (e) => {
   }
 
   if (e.target.classList.contains('gif-save__btn')) {
-    console.log('fire');
     const name = NODES.saveInput.value;
     saveAsGIF(name);
   }

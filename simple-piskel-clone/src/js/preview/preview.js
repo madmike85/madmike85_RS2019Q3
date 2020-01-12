@@ -60,7 +60,7 @@ function fullscreenChange() {
       `Current full screen element is : 
         ${document.fullscreenElement ||
           document.webkitFullscreenElement ||
-          document.mozFullScreenElement}`
+          document.mozFullScreenElement}`,
     );
   } else if ('exitFullscreen' in document) {
     document.exitFullscreen();

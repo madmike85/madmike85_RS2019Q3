@@ -40,8 +40,8 @@ function hexToRGB(hex, alpha) {
   return [r, g, b];
 }
 
-function rgbToHEX(chanel) {
-  let hex = chanel.toString(16);
+function rgbToHEX(channel) {
+  let hex = channel.toString(16);
   if (hex.length < 2) {
     hex = `0${hex}`;
   }
@@ -54,7 +54,7 @@ function rgbToFullHEX(r, g, b) {
 
 function getAdjustedCoordinates(eventX, eventY) {
   const calcPixelSize = Math.ceil(
-    PROPERTIES.canvasSize / (PROPERTIES.pixelSize / PROPERTIES.pixelSizeMult)
+    PROPERTIES.canvasSize / (PROPERTIES.pixelSize / PROPERTIES.pixelSizeMult),
   );
   const fixedX = eventX / (PROPERTIES.canvasSize / NODES.mainCanvas.width);
   const fixedY = eventY / (PROPERTIES.canvasSize / NODES.mainCanvas.height);
@@ -65,4 +65,12 @@ function getAdjustedCoordinates(eventX, eventY) {
   return [x, y];
 }
 
-export { colorsMatch, getPixel, setPixel, hexToRGB, rgbToFullHEX, getAdjustedCoordinates };
+export {
+  colorsMatch,
+  getPixel,
+  setPixel,
+  hexToRGB,
+  rgbToFullHEX,
+  getAdjustedCoordinates,
+  rgbToHEX,
+};
