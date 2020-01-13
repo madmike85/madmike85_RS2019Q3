@@ -7,7 +7,7 @@ function updateCursor() {
       NODES.mainCanvas.style.cursor = 'url(assets/img/pencil.cur), default';
       break;
     case 'line':
-      NODES.mainCanvas.style.cursor = 'url(assets/img/lightstroke_alt.ani), default';
+      NODES.mainCanvas.style.cursor = 'url(assets/img/pencil_alt.cur), default';
       break;
     case 'bucket':
     case 'bucket-color':

@@ -13,3 +13,4 @@
 | January 6   | January 6   | 1h         | JEST setup                        |
 | January 8   | January 9   | 3h         | Saving to .apng and .gif          |
 | January 11  | January 12  | 2h         | Landing page                      |
+| December 28 | January 13  | 10h        | Bug fixing                        |
