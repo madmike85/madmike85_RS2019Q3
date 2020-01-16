@@ -1,0 +1,24 @@
+.tippy-tooltip {
+  &.black-theme {
+    background: #000;
+    color: #fff;
+    font-size: 12px;
+
+    &[data-placement^='top'] .tippy-arrow {
+      border-top-color: #000;
+    }
+    &[data-placement^='bottom'] .tippy-arrow {
+      border-bottom-color: #000;
+    }
+    &[data-placement^='left'] .tippy-arrow {
+      border-left-color: #000;
+    }
+    &[data-placement^='right'] .tippy-arrow {
+      border-right-color: #000;
+    }
+  }
+}
+
+.hotkey {
+  color: #ffd700;
+}

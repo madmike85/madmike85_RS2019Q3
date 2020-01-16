@@ -1,0 +1,50 @@
+@import 'header/header';
+@import 'tools-panel/tools-panel';
+@import 'frames-roll/frames-roll';
+@import 'preview-panel/preview-panel.scss';
+@import 'canvas/canvas';
+@import 'utils/utils';
+@import 'modal/modal';
+@import 'menu/menu';
+@import 'landing/landing';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1d1d1d;
+  overflow: hidden;
+  user-select: none;
+}
+
+.editor-container {
+  height: 94vh;
+
+  display: none;
+
+  &.shown {
+    display: flex;
+  }
+}
+
+.landing-container {
+  display: none;
+
+  &.shown {
+    display: block;
+  }
+}
+
+.left-side-tools {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.right-side-tools {
+  width: 253px;
+}

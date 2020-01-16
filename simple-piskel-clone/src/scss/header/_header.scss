@@ -1,0 +1,53 @@
+@mixin transitions() {
+  transition: 0.3s ease all;
+  -webkit-transition: 0.3s ease all;
+  -moz-transition: 0.3s ease all;
+  -o-transition: 0.3s ease all;
+  -ms-transition: 0.3s ease all;
+}
+
+.header {
+  margin-bottom: 15px;
+}
+
+.navigation {
+  background: #2d2d2d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
+.logo {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  cursor: pointer;
+  background-color: #ffd700;
+  color: #000;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  padding: 0 10px;
+  border-radius: 3px;
+  height: 24px;
+  line-height: 24px;
+
+  @include transitions();
+
+  &:hover {
+    background: #fff;
+  }
+}
+
+.btn-create-sprite {
+  margin-right: 6px;
+}

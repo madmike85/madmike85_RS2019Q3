@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Piskel Clone</title>
+    <script src="https://kit.fontawesome.com/271d73b571.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="navigation">
+        <h1 class="logo">Piskel</h1>
+        <div class="btn-row">
+          <div class="btn btn-create-sprite">Create Sprite</div>
+          <div class="btn btn-sign-in">Sign In</div>
+        </div>
+      </nav>
+    </header>
+    <div class="landing-container shown">
+      <div class="landing-header">
+        <div class="landing-header__left-side">
+          <h2 class="landing-header__title">Piskel-clone</h2>
+          <p class="landing-header__description">
+            Piskel-clone is a online editor for animated sprites & pixel art
+          </p>
+          <div class="btn btn-create-sprite">Create Sprite</div>
+        </div>
+        <div class="landing-header__right-side">
+          <img src="./assets/img/localhost_8081_.png" alt="header" class="ladnging-header__image" />
+        </div>
+      </div>
+      <div class="landing-body">
+        <div class="landing-body__left-side">
+          <div class="animations-line">
+            <h3 class="line__title">Example sprites</h3>
+            <div class="animations">
+              <img src="./assets/img/lights.apng" alt="" class="animation" />
+              <img src="./assets/img/smile.apng" alt="" class="animation" />
+            </div>
+          </div>
+        </div>
+        <div class="landing-body__right-side">
+          <div class="feature-item">
+            <h4 class="feature-title">Live preview</h4>
+            <p class="feature-description">
+              Check a preview of your animation in real time as you draw. Adjust the frame delay on
+              the fly.
+            </p>
+          </div>
+          <div class="feature-item">
+            <h4 class="feature-title">Export to GIF, APNG...</h4>
+            <p class="feature-description">
+              Several export modes supported. Animated GIFs and APNGs for sharing.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="landing-footer">
+        <p class="landing-footer__title">Created by:</p>
+        <div class="landing-footer__link">
+          <i class="fab fa-github"></i>
+          <a href="https://github.com/madmike85">Mikhail Shcheglakov</a>
+        </div>
+      </div>
+    </div>
+    <div class="editor-container">
+      <div class="left-side-tools">
+        <div class="tools-panel">
+          <div class="sizes-panel">
+            <div class="size-panel__element selected" data-size="1"></div>
+            <div class="size-panel__element" data-size="2"></div>
+            <div class="size-panel__element" data-size="3"></div>
+            <div class="size-panel__element" data-size="4"></div>
+          </div>
+          <div class="tools-grid">
+            <div class="tools-grid__element selected" data-tool="pencil"></div>
+            <div class="tools-grid__element" data-tool="line"></div>
+            <div class="tools-grid__element" data-tool="bucket"></div>
+            <div class="tools-grid__element" data-tool="bucket-color"></div>
+            <div class="tools-grid__element" data-tool="eraser"></div>
+            <div class="tools-grid__element" data-tool="eyedropper"></div>
+          </div>
+          <div class="pallete-wrapper">
+            <div class="primary-color">
+              <input type="color" class="primary-color-picker" value="#ffd700" />
+            </div>
+            <div class="secondary-color">
+              <input type="color" class="secondary-color-picker" value="#ea2708" />
+            </div>
+            <div class="color-switch-btn"></div>
+          </div>
+        </div>
+        <div class="frames-container">
+          <div class="frames-roll-container">
+            <!-- <div class="frame" draggable="true" data-id="0">
+              <canvas class="frame__tile"></canvas>
+              <div class="frame__number">1</div>
+              <div class="frame__btn-holder">
+                <div class="frame__btn frame__delete-btn"></div>
+                <div class="frame__btn frame__move-btn"></div>
+                <div class="frame__btn frame__copy-btn"></div>
+              </div>
+            </div>
+            <div class="frame selected" draggable="true" data-id="1">
+              <canvas class="frame__tile"></canvas>
+              <div class="frame__number">2</div>
+              <div class="frame__btn-holder">
+                <div class="frame__btn frame__delete-btn"></div>
+                <div class="frame__btn frame__move-btn"></div>
+                <div class="frame__btn frame__copy-btn"></div>
+              </div>
+            </div> -->
+          </div>
+          <div class="add-frame-btn">
+            <div class="add-frame-btn__icon"></div>
+            <div class="add-frame-btn__lable">Add new frame</div>
+          </div>
+        </div>
+        <div class="cheatsheet-btn"></div>
+      </div>
+      <div class="main-canvas-holder">
+        <canvas id="canvas"> </canvas>
+      </div>
+      <div class="right-side-tools">
+        <div class="preview-holder">
+          <canvas class="preview-canvas"></canvas>
+          <div class="fullscreen-btn"></div>
+        </div>
+        <div class="frame-slider">
+          <span class="frame-slider__lable">24 fps</span>
+          <input type="range" min="0" max="24" steps="1" value="24" class="frame-slider__range" />
+        </div>
+        <div class="menu">
+          <div class="menu-btn-holder">
+            <div class="menu-btn resize-btn"></div>
+            <div class="menu-btn save-btn"></div>
+          </div>
+          <div class="menu-content-holder">
+            <div class="resize-menu menu-open">
+              <p class="menu-lable">resize</p>
+              <div class="menu-element-row">
+                <p class="input-lable">Width</p>
+                <input type="text" class="width-input" />
+                <p>px</p>
+              </div>
+              <div class="menu-element-row">
+                <p class="input-lable">Height</p>
+                <input type="text" class="height-input" />
+                <p>px</p>
+              </div>
+              <div class="action-btn resize-action">Resize</div>
+              <p class="menu-lable">Use presets</p>
+              <div class="presets__row">
+                <div class="preset">
+                  <label class="preset__lable"
+                    >32 x 32
+                    <input type="radio" checked="checked" name="radio" data-preset="32" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                <div class="preset">
+                  <label class="preset__lable"
+                    >64 x 64
+                    <input type="radio" name="radio" data-preset="64" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                <div class="preset">
+                  <label class="preset__lable"
+                    >128 x 128
+                    <input type="radio" name="radio" data-preset="128" />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="action-btn preset-action">Use preset</div>
+            </div>
+            <div class="save-menu ">
+              <p class="menu-lable">sprite information</p>
+              <div class="saving-name-input-holder">
+                <p>Title :</p>
+                <input type="text" class="save-input" />
+              </div>
+              <p class="menu-lable">save as file</p>
+              <div class="apng-save">
+                <div class="apng-save__btn">Save as .apng</div>
+                <p class="description">Your sprite will be downloaded as a .apng file.</p>
+              </div>
+              <div class="gif-save">
+                <div class="gif-save__btn">Save as .gif</div>
+                <p class="description">Your sprite will be downloaded as a .gif file.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal">
+      <div class="modal__frame">
+        <h2 class="modal__header">
+          <span class="header__title">Keyboard shortcuts</span>
+          <span class="header__close">X</span>
+        </h2>
+        <div class="cheatsheet__container">
+          <div class="cheatsheet__module">
+            <h3 class="module__header">Tool shortcuts</h3>
+            <ul class="shortcuts-column">
+              <li class="module__row">
+                <div class="element-icon" data-shortcut="pencil"></div>
+                <div class="shortcut-value" data-key="pencil">P</div>
+                <p class="shortcut-description">Pen tool</p>
+              </li>
+              <li class="module__row">
+                <div class="element-icon" data-shortcut="line"></div>
+                <div class="shortcut-value" data-key="line">L</div>
+                <p class="shortcut-description">Stroke tool</p>
+              </li>
+              <li class="module__row">
+                <div class="element-icon" data-shortcut="bucket"></div>
+                <div class="shortcut-value" data-key="bucket">B</div>
+                <p class="shortcut-description">Paint bucket tool</p>
+              </li>
+              <li class="module__row">
+                <div class="element-icon" data-shortcut="bucket-color"></div>
+                <div class="shortcut-value" data-key="bucket-color">A</div>
+                <p class="shortcut-description">Magic bucket tool</p>
+              </li>
+              <li class="module__row">
+                <div class="element-icon" data-shortcut="eraser"></div>
+                <div class="shortcut-value" data-key="eraser">E</div>
+                <p class="shortcut-description">Eraser tool</p>
+              </li>
+              <li class="module__row">
+                <div class="element-icon" data-shortcut="eyedropper"></div>
+                <div class="shortcut-value" data-key="eyedropper">O</div>
+                <p class="shortcut-description">Color picker</p>
+              </li>
+            </ul>
+          </div>
+          <div class="cheatsheet__module">
+            <h3 class="module__header">Misc shortcuts</h3>
+            <ul class="shortcuts-column">
+              <li class="module__row">
+                <div class="shortcut-value" data-key="increase">]</div>
+                <p class="shortcut-description">Increase pen size</p>
+              </li>
+              <li class="module__row">
+                <div class="shortcut-value" data-key="decrease">[</div>
+                <p class="shortcut-description">Decrease pen size</p>
+              </li>
+              <li class="module__row">
+                <div class="shortcut-value" data-key="new">N</div>
+                <p class="shortcut-description">Create new frame</p>
+              </li>
+              <li class="module__row">
+                <div class="shortcut-value" data-key="delete">D</div>
+                <p class="shortcut-description">Delete selected frame</p>
+              </li>
+              <li class="module__row">
+                <div class="shortcut-value" data-key="copy">C</div>
+                <p class="shortcut-description">Copy selected frame</p>
+              </li>
+              <li class="module__row">
+                <div class="shortcut-value" data-key="swap">X</div>
+                <p class="shortcut-description">Swap primary/secondary colors</p>
+              </li>
+              <li class="module__row">
+                <div class="shortcut-value" data-key="fullscreen">F</div>
+                <p class="shortcut-description">Open in fullscreen mode</p>
+              </li>
+              <li class="module__row">
+                <div class="shortcut-value" data-key="resize">R</div>
+                <p class="shortcut-description">Resize the canvas</p>
+              </li>
+            </ul>
+          </div>
+          <div class="cheatsheet__module">
+            <h3 class="module__header">Storage shortcuts</h3>
+            <ul class="shortcuts-column">
+              <li class="module__row">
+                <div class="shortcut-value" data-key="save">S</div>
+                <p class="shortcut-description">Save into the file</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal__action">
+          <div class="restore-default-btn">Restore default shortcuts</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
