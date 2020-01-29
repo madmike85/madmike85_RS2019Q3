@@ -1,2 +1,2 @@
-# madmike85-RS2019Q3
-Private repository for @madmike85
+# madmike85_RS2019Q3
+The Rolling Scopes School repository for @madmike85
